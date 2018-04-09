@@ -12,22 +12,23 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 #include <fstream>
 using namespace std;
 
-#ifndef WAGON_H
-#define WAGON_H
+#ifndef WAGONGANG_H
+#define WAGONGANG_H
 
 class Gang
 {
     public:
-
         Gang();
+        Gang(string);
+        ~Gang();
 
         string getName();
         bool getAlive();
         int getSickDays();
 
-        void setName();
-        void setAlive();
-        void setSickDays();
+        void setName(string);
+        void setAlive(bool);
+        void setSickDays(int);
 
     private:
 
@@ -41,6 +42,49 @@ class Gang
 
 Gang::Gang()
 {
+    name = "NONE";
+    alive = false;
+    sickDays = 0;
+}
 
+Gang::Gang(string Title)
+{
+    name = Title;
+    alive = true;
+    sickDays = 0;
+}
+
+string Gang::getName()
+{
+    return name;
+}
+
+bool Gang::getAlive()
+{
+    return alive;
+}
+
+int Gang::getSickDays()
+{
+    return sickDays;
+}
+
+void Gang::setName(string newName)
+{
+    name = newName;
+}
+
+void Gang::setAlive(bool maybe)
+{
+    alive = maybe;
+}
+
+void Gang::setSickDays(int amount)
+{
+    sickDays = amount;
+}
+
+Gang::~Gang()
+{
     
 }

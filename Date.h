@@ -16,10 +16,11 @@ using namespace std;
 #define DATE_H
 
 class Date
-{
+{ 
     public:
 
         Date();
+        Date(int, string);
 
         int getDay();
         string getMonth();
@@ -43,6 +44,13 @@ Date::Date()
 {
     day = 28;
     month = "March";
+    year = 1846;
+}
+
+Date::Date(int Day, string Month)
+{
+    day = Day;
+    month = Month;
     year = 1846;
 }
 

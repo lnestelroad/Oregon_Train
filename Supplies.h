@@ -17,45 +17,75 @@ using namespace std;
 
 class Supplies
 {
-    public:
+    public: 
 
         Supplies();
+        Supplies(string, float);
+        ~Supplies();
 
-        int getNumOxen();
-        int getNumFood();
-        int getNumBullets();
+        string getName();
+        float getAmount();
+        float getCost();
 
-        int getNumWheels();
-        int getNumAxles();
-        int getNumTongues();
-
-        int getBill();
-        int getMoney();
-
-        void setNumFood();
-        void setNumBullets();
-        void setNumOxen();
-
-        void setNumWheels();
-        void setNumAxles();
-        void setNumTongues();
-
-        void setBill();
-        void setMoney();
+        void setName(string);
+        void setAmount(float);
+        void setCost(float);
 
     private:
 
-        int numOxen;
-        int numFood;
-        int numBullets;
-
-        int numWheels;
-        int numAxles;
-        int numTongues;
-
-        int bill;
-        int money;
+        string name;
+        float amount;
+        float cost;
 
 };
 
 #endif 
+
+Supplies::Supplies()
+{
+    name = "NONE";
+    amount = 0;
+    cost = 0;
+}
+
+Supplies::Supplies(string Title, float Dollars)
+{
+    name = Title;
+    amount = 0;
+    cost = Dollars;
+}
+
+string Supplies::getName()
+{
+    return name;
+}
+
+float Supplies::getAmount()
+{
+    return amount;
+}
+
+float Supplies::getCost()
+{
+    return cost;
+}
+
+void Supplies::setName(string Title)
+{
+    name = Title;
+}
+
+void Supplies::setAmount(float newAmount)
+{
+    amount = newAmount;
+}
+
+void Supplies::setCost(float newCost)
+{
+    cost = newCost;
+}
+
+Supplies::~Supplies()
+{
+
+}
