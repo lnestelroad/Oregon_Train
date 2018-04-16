@@ -12,7 +12,7 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 using namespace std;
 
 void Misfortune()
-{
+{ 
     //this function will simulate the misfortune chance and the puzzles.
     //a 40 percent change for a missfortune will occure every round
     //one miss fortune will be chosen at randome the player.
@@ -45,14 +45,26 @@ void menu()
 
 int main()
 {
-    int miles = 0;
+    string enter = "";
+    
     cout << "Welcome to The Oregon Trail!" << endl;
 
     Wagon one = Wagon();
+    
+    cout << "Before leaving Independence, you should consider bying supplies." << endl;
+    cout << "After buying your wagaon, you have $1000 left to spend in the shop." << endl;
+    cout << "All of the neccessary materials can be found there, but you do not need to spend all of your money now." << endl;
+    cout << "\nPress enter to continue" << endl;
 
-    shop();
-    while (miles < 2048)
-    {
-        main();
-    }
+    cin >> enter;
+    if (enter.length() == 0)
+
+
+
+
+    // shop();
+    // while (miles < 2048)  
+    // {
+        
+    // }
 }

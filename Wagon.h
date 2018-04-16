@@ -30,8 +30,10 @@ class Wagon
         Gang getPersons(int);
         Supplies getMaterials(string);
         int getMoney();
+        int getMiles();
 
         void setMoney(int);
+        void setMiles(int);
 
     private:
 
@@ -39,6 +41,7 @@ class Wagon
         Gang persons[5];
         Supplies materials[7];
         int money;
+        int miles;
 };
 
 #endif
@@ -49,12 +52,13 @@ Wagon::Wagon()
     string leader = "";
     string companion = "";
 
-    cout << "What is your name?" << endl;
+    cout << "What is the name of the wagon leader?" << endl;
     getline(cin,leader);
+    persons[0] = leader;
 
     cout << "Who will be joining you?" << endl;
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 1; i < 5; i++)
     {
         cout << "Companion " << i << ":";
         getline(cin,companion);
@@ -73,7 +77,7 @@ Wagon::Wagon()
     Supplies medKit = Supplies("medKit", 25);
     //////////////////////////////////////////////////////
     string choice;
-    cout << "The start date is March 28, 1846. If you would like to start at a different time press y. If not press n" << endl;
+    cout << "The start date is March 28, 1846. If you would like to start at a different time press y. If not press enter " << endl;
     getline(cin, choice);
 
     if (choice == "y")
@@ -95,6 +99,7 @@ Wagon::Wagon()
     }
     //////////////////////////////////////////////////////
     int money = 1200;
+    int miles = 0;
 }
 
 Date Wagon::getTime()
@@ -127,8 +132,22 @@ int Wagon::getMoney()
     return money;
 }
 
+int Wagon::getMiles()
+{
+    return miles;
+}
+
 void Wagon::setMoney(int newMoney)
 {
     money = newMoney;
 }
 
+void Wagon::setMiles(int newMiles)
+{
+    miles = newMiles;
+}
+
+Wagon::~Wagon()
+{
+
+}
