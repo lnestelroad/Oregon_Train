@@ -29,7 +29,7 @@ class Wagon
         Date getTime();
         Gang getPersons(int);
         Supplies getMaterials(string);
-        int getMoney();
+        float getMoney();
         int getMiles();
 
         void setMoney(int);
@@ -40,7 +40,7 @@ class Wagon
         Date time;
         Gang persons[5];
         Supplies materials[7];
-        int money;
+        float money;
         int miles;
 };
 
@@ -67,14 +67,21 @@ Wagon::Wagon()
     }
     ///////////////////////////////////////////////////////
     Supplies food = Supplies("food", 0.5);
+        materials[0] = food;
     Supplies bullets = Supplies("bullets", 2);
+        materials[1] = bullets;
     Supplies oxen = Supplies("oxen", 40);
+        materials[2] = oxen;
 
     Supplies wheels = Supplies("wheels", 20);
+        materials[3] = wheels;
     Supplies axles = Supplies("axles", 20);
+        materials[4] = axles;
     Supplies tongues = Supplies("tongues", 20);
+        materials[5] = tongues;
 
     Supplies medKit = Supplies("medKit", 25);
+        materials[6] = medKit;
     //////////////////////////////////////////////////////
     string choice;
     cout << "The start date is March 28, 1846. If you would like to start at a different time press y. If not press enter " << endl;
@@ -98,8 +105,8 @@ Wagon::Wagon()
         Date today = Date();
     }
     //////////////////////////////////////////////////////
-    int money = 1200;
-    int miles = 0;
+    money = 1200;
+    miles = 0;
 }
 
 Date Wagon::getTime()
@@ -127,7 +134,7 @@ Supplies Wagon::getMaterials(string name)
     return materials[index];
 }
 
-int Wagon::getMoney()
+float Wagon::getMoney()
 {
     return money;
 }
