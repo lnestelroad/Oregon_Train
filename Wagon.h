@@ -33,7 +33,7 @@ class Wagon
         int getMiles();
 
         void setMaterialAmount(int, string);
-        void setMoney(int);
+        void setMoney(float);
         void setMiles(int);
 
     private:
@@ -160,7 +160,7 @@ void Wagon::setMaterialAmount(int newAmount, string name)
     materials[index].setAmount(newAmount);
 }
 
-void Wagon::setMoney(int newMoney)
+void Wagon::setMoney(float newMoney)
 {
     money = newMoney;
 }

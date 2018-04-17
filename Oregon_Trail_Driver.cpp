@@ -55,7 +55,7 @@ void shop(Wagon one)
     string choice = "";
     string amount = "";
     float numAmount;  //casted form of the amoun variable
-    float bill = 0;  //sets the intial bill to $0.
+    float bill = 0.0;  //sets the intial bill to $0.
 
     while (true)  //runs indefinatly or until q is chosen (contains a break command)
     {
@@ -75,14 +75,14 @@ void shop(Wagon one)
 /**
  * This block is used to calculate the total bill after each puchase
  */
-        bill = ((one.getMaterials("oxen").getAmount() * 40) 
+        bill = ((one.getMaterials("oxen").getAmount() * 40.0) 
                +(one.getMaterials("food").getAmount() * 0.5)
-               +(one.getMaterials("bullets").getAmount() * 2)
-               +(one.getMaterials("wheels").getAmount() * 20)
-               +(one.getMaterials("axles").getAmount() * 20)
-               +(one.getMaterials("tongues").getAmount() * 20)
-               +(one.getMaterials("medkits").getAmount() * 0));
-        cout << "Your bill is: " << bill << endl; 
+               +(one.getMaterials("bullets").getAmount() * 2.0)
+               +(one.getMaterials("wheels").getAmount() * 20.0)
+               +(one.getMaterials("axles").getAmount() * 20.0)
+               +(one.getMaterials("tongues").getAmount() * 20.0)
+               +(one.getMaterials("medkits").getAmount() * 0.0));
+        cout << "Your bill is: $" << bill << endl; 
 
         cout << "\nWhich item would you like to purchase?" << endl;
         cout << "Press 'q' to leave store." << endl;
@@ -232,7 +232,7 @@ void shop(Wagon one)
  */      
         else if (choice == "q")
         {
-            one.setMoney(1000 - bill);  //1000 because 200 was spent on the wagon itself.
+            one.setMoney(1000.0 - bill);  //1000 because 200 was spent on the wagon itself.
             break;
         }
     }
