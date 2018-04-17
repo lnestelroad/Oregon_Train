@@ -28,6 +28,7 @@ void clear()
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void shop(Wagon one)
 {
 //*********************************************************************************************************//
@@ -47,30 +48,54 @@ void shop(Wagon one)
     storeScript.close();
     clear();
 //*********************************************************************************************************//
+/**
+ * prints off the current items in the users shopping cart along with the bill for each item
+ * and askes what the user would like to buy next
+ */
     string choice = "";
     string amount = "";
-    float numAmount;
+    float numAmount;  //casted form of the amoun variable
+    float bill = 0;  //sets the intial bill to $0.
 
-    while (true)
+    while (true)  //runs indefinatly or until q is chosen (contains a break command)
     {
+        system("clear");
+
         cout << "\nCurrent Items:\n" << endl;
 
         cout << "1. Oxen           " << "$" << one.getMaterials("oxen").getCost() * one.getMaterials("oxen").getAmount() << endl;
         cout << "2. Food           " << "$" << one.getMaterials("food").getCost() * one.getMaterials("food").getAmount() << endl;
         cout << "3. Bullets        " << "$" << one.getMaterials("bullets").getCost() * one.getMaterials("bullets").getAmount() << endl;
-        cout << "4. Spare Parts    " << "$" << (one.getMaterials("wheels").getCost() * one.getMaterials("wheels").getAmount()) 
+        cout << "4. Spare Parts    " << "$" << (one.getMaterials("wheels").getCost() * one.getMaterials("wheels").getAmount())
                                       + (one.getMaterials("axles").getCost() * one.getMaterials("axles").getAmount())
                                       + (one.getMaterials("tongues").getCost() * one.getMaterials("tongues").getAmount())
                                       + (one.getMaterials("medkits").getCost() * one.getMaterials("medkits").getAmount()) << endl;
-        cout << "which item would you like to purchase?" << endl;
+
+//*********************************************************************************************************//
+/**
+ * This block is used to calculate the total bill after each puchase
+ */
+        bill = ((one.getMaterials("oxen").getAmount() * 40) 
+               +(one.getMaterials("food").getAmount() * 0.5)
+               +(one.getMaterials("bullets").getAmount() * 2)
+               +(one.getMaterials("wheels").getAmount() * 20)
+               +(one.getMaterials("axles").getAmount() * 20)
+               +(one.getMaterials("tongues").getAmount() * 20)
+               +(one.getMaterials("medkits").getAmount() * 0));
+        cout << "Your bill is: " << bill << endl; 
+
+        cout << "\nWhich item would you like to purchase?" << endl;
         cout << "Press 'q' to leave store." << endl;
         getline(cin, choice);
-
+//*********************************************************************************************************//
+/**
+ * This block is the branch for if the user elects to buy oxen
+ */
         if (choice == "1")
         {
             system("clear");
 
-            cout << "There are 2 oxen in a yoke and each yoke will cost $40." << endl;
+            cout << "There are 2 oxen in a yoke and each yoke will cost $" << one.getMaterials("oxen").getCost() << endl;
             cout << "Remember, you must spend $100-$200 on oxen." << endl;
             cout << "How many would you like to buy?" << endl;
 
@@ -78,25 +103,140 @@ void shop(Wagon one)
             //if there is enough money and the amount spent on oxen is between 100 and 200.
             getline(cin, amount);
             numAmount = stof(amount);
-            if (numAmount * 40 < one.getMoney() && numAmount * 40 >= 100 && numAmount <= 200)
-            {
+
+            if (numAmount * 40 < one.getMoney() - bill && numAmount * 40 >= 100 && numAmount <= 200)
                 one.setMaterialAmount(numAmount, "oxen");
-                // int currentMoney = one.getMoney();
-                // one.setMoney(currentMoney - (numAmount * 40));
-            }
             else if (numAmount * 40 > one.getMoney())
                 cout << "Sorry sport, looks like you don't have enough!" << endl;
             else
                 cout << "Sorry champ, you must speen between $100 and $200 on oxen" << endl;
         }
+//*********************************************************************************************************//
+/**
+ * This block is the branch for if the user elects to buy food
+ */
+        else if (choice == "2")
+        {
+            system("clear");
+
+            cout << "It is recommended that you bring at least 200 lbs. of food per person." << endl;
+            cout << "As of now, the price of food is " << one.getMaterials("food").getCost() << " cents per pound." << endl;
+            cout << "How many pounds of food would you like to puchase?" << endl;
+
+            getline(cin, amount);
+            numAmount = stof(amount);
+
+            if (numAmount * 0.5 < one.getMoney() - bill)
+                one.setMaterialAmount(numAmount, "food");
+            else
+                cout << "Sorry buckaroo, looks like you don't have enough!" << endl;
+        }
+//*********************************************************************************************************//  
+/**
+ * This block is the branch for if the user elects to buy bullets
+ */
+        else if (choice == "3")
+        {
+            system("clear");
+
+            cout << "Ammunition is sold in boxes of 20 bullets. Each box costs $" << one.getMaterials("bullets").getCost() << endl;
+            cout << "How many boxes do you want?" << endl;
+
+            getline(cin, amount);
+            numAmount = stof(amount);
+
+            if (numAmount * 2 < one.getMoney() - bill)
+                one.setMaterialAmount(numAmount, "bullets");
+            else
+                cout << "Sorry slugger, looks like you don't have enough!" << endl;
+        }
+//*********************************************************************************************************// 
+/**
+ * This block is the branch for if the user elects to buy spare parts. The function will take the user into a 
+ * new menu function like the supplies menu.
+ */
+        else if (choice == "4")
+        {
+            while(true)
+            {
+                system("clear");
+
+                cout << "It's a food idea to have a few spare parts for your wagon. Here are the prices: " << endl;
+                cout << "1. Wheels     " << "$" << one.getMaterials("wheels").getCost() << " each"  << endl;
+                cout << "2. Axles      " << "$" << one.getMaterials("axles").getCost() << " each" << endl;
+                cout << "3. Tongues    " << "$" << one.getMaterials("tongues").getCost() << " each" << endl;
+                cout << "4. MedKits    " << "$" << one.getMaterials("medKits").getCost() << " each" << endl;
+
+                cout << "\nWhich item would you like to purchase?" << endl;
+                cout << "press 'q' to return to the store" << endl;
+                getline(cin, choice);
+            //---------------------------------------------------------------------------//
+                if (choice == "1")
+                {
+                    cout << "How many wheels do you want?" << endl;
+
+                    getline(cin, amount);
+                    numAmount = stof(amount);
+
+                    if (numAmount * 20 < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, "wheels");
+                    else
+                        cout << "Sorry chief, looks like you don't have enough!" << endl;
+                }
+            //---------------------------------------------------------------------------//
+                else if (choice == "2")
+                {
+                    cout << "How many axles would you like?" << endl;
+
+                    getline(cin, amount);
+                    numAmount = stof(amount);
+
+                    if (numAmount * 20 < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, "axles");
+                    else
+                        cout << "Sorry chief, looks like you don't have enough!" << endl;
+                }
+            //---------------------------------------------------------------------------//
+                else if (choice == "3")
+                {
+                    cout << "How many tongues do you want?" << endl;
+
+                    getline(cin, amount);
+                    numAmount = stof(amount);
+
+                    if (numAmount * 20 < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, "tongues");
+                    else
+                        cout << "Sorry chief, looks like you don't have enough!" << endl;
+                }
+            //---------------------------------------------------------------------------//
+                else if (choice == "4")
+                {
+                    cout << "How many medKits do you want?" << endl;
+
+                    getline(cin, amount);
+                    numAmount = stof(amount);
+
+                    if (numAmount * 20 < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, "medkits");
+                    else
+                        cout << "Sorry chief, looks like you don't have enough!" << endl;
+                }
+                else
+                    break;
+            }
+        }
+//*********************************************************************************************************// 
+/**
+ * This block is the branch for if the user elects to leave the shop
+ */      
         else if (choice == "q")
         {
-            // one.setMoney(1200 - bill);
+            one.setMoney(1000 - bill);  //1000 because 200 was spent on the wagon itself.
             break;
         }
-        float bill = ((one.getMaterials("oxen").getAmount() * 40));
-        cout << "Your bill is: " << bill << endl; 
     }
+    cout << one.getMoney() << endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
