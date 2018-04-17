@@ -32,6 +32,7 @@ class Wagon
         float getMoney();
         int getMiles();
 
+        void setMaterialAmount(int, string);
         void setMoney(int);
         void setMiles(int);
 
@@ -142,6 +143,21 @@ float Wagon::getMoney()
 int Wagon::getMiles()
 {
     return miles;
+}
+
+void Wagon::setMaterialAmount(int newAmount, string name)
+{
+    int index = 0;
+
+    for (int i = 0; i < 7; i++)
+    {
+        if(name == materials[i].getName())
+        {
+            index = i;
+        }
+    }
+
+    materials[index].setAmount(newAmount);
 }
 
 void Wagon::setMoney(int newMoney)
