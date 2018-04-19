@@ -13,22 +13,6 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * This is an auxilary fucntion which when called upon will clear the terminal screen.
- */
-void clear()
-{
-    string enter = "";
-    cout << "\nPress enter to continue" << endl;
-
-    getline(cin, enter);  //takes in the users enter from the terminal
-    if (enter.length() == 0)  //makes sure the users input was an enter
-    {
-        system("clear");
-    }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void shop(Wagon one)
 {
 //*********************************************************************************************************//
@@ -69,7 +53,7 @@ void shop(Wagon one)
         cout << "4. Spare Parts    " << "$" << (one.getMaterials("wheels").getCost() * one.getMaterials("wheels").getAmount())
                                       + (one.getMaterials("axles").getCost() * one.getMaterials("axles").getAmount())
                                       + (one.getMaterials("tongues").getCost() * one.getMaterials("tongues").getAmount())
-                                      + (one.getMaterials("medkits").getCost() * one.getMaterials("medkits").getAmount()) << endl;
+                                      + (one.getMaterials(6).getCost() * one.getMaterials(6).getAmount()) << endl;
 
 //*********************************************************************************************************//
 /**
@@ -100,16 +84,19 @@ void shop(Wagon one)
             cout << "How many would you like to buy?" << endl;
 
             //Takes the amount the user wants and adds it the amount data member in the specified supply object
-            //if there is enough money and the amount spent on oxen is between 100 and 200.
-            getline(cin, amount);
-            numAmount = stof(amount);
+            //if there is enough money and the amount spent on oxen is between 100 and 200.                 
+            
+            numAmount = Amount();
 
             if (numAmount * 40 < one.getMoney() - bill && numAmount * 40 >= 100 && numAmount <= 200)
                 one.setMaterialAmount(numAmount, "oxen");
             else if (numAmount * 40 > one.getMoney())
                 cout << "Sorry sport, looks like you don't have enough!" << endl;
             else
+            {
                 cout << "Sorry champ, you must speen between $100 and $200 on oxen" << endl;
+                clear();
+            }
         }
 //*********************************************************************************************************//
 /**
@@ -121,10 +108,9 @@ void shop(Wagon one)
 
             cout << "It is recommended that you bring at least 200 lbs. of food per person." << endl;
             cout << "As of now, the price of food is " << one.getMaterials("food").getCost() << " cents per pound." << endl;
-            cout << "How many pounds of food would you like to puchase?" << endl;
-
-            getline(cin, amount);
-            numAmount = stof(amount);
+            cout << "How many pounds of food would you like to puchase?" << endl;                   
+            
+            numAmount = Amount();
 
             if (numAmount * 0.5 < one.getMoney() - bill)
                 one.setMaterialAmount(numAmount, "food");
@@ -140,10 +126,9 @@ void shop(Wagon one)
             system("clear");
 
             cout << "Ammunition is sold in boxes of 20 bullets. Each box costs $" << one.getMaterials("bullets").getCost() << endl;
-            cout << "How many boxes do you want?" << endl;
-
-            getline(cin, amount);
-            numAmount = stof(amount);
+            cout << "How many boxes do you want?" << endl;                  
+            
+            numAmount = Amount();
 
             if (numAmount * 2 < one.getMoney() - bill)
                 one.setMaterialAmount(numAmount, "bullets");
@@ -165,7 +150,7 @@ void shop(Wagon one)
                 cout << "1. Wheels     " << "$" << one.getMaterials("wheels").getCost() << " each"  << endl;
                 cout << "2. Axles      " << "$" << one.getMaterials("axles").getCost() << " each" << endl;
                 cout << "3. Tongues    " << "$" << one.getMaterials("tongues").getCost() << " each" << endl;
-                cout << "4. MedKits    " << "$" << one.getMaterials("medKits").getCost() << " each" << endl;
+                cout << "4. MedKits    " << "$" << one.getMaterials(6).getCost() << " each" << endl;
 
                 cout << "\nWhich item would you like to purchase?" << endl;
                 cout << "press 'q' to return to the store" << endl;
@@ -174,9 +159,9 @@ void shop(Wagon one)
                 if (choice == "1")
                 {
                     cout << "How many wheels do you want?" << endl;
-
-                    getline(cin, amount);
-                    numAmount = stof(amount);
+                    
+                    
+                    numAmount = Amount();
 
                     if (numAmount * 20 < one.getMoney() - bill)
                         one.setMaterialAmount(numAmount, "wheels");
@@ -187,9 +172,9 @@ void shop(Wagon one)
                 else if (choice == "2")
                 {
                     cout << "How many axles would you like?" << endl;
-
-                    getline(cin, amount);
-                    numAmount = stof(amount);
+                    
+                    
+                    numAmount = Amount();
 
                     if (numAmount * 20 < one.getMoney() - bill)
                         one.setMaterialAmount(numAmount, "axles");
@@ -200,9 +185,9 @@ void shop(Wagon one)
                 else if (choice == "3")
                 {
                     cout << "How many tongues do you want?" << endl;
-
-                    getline(cin, amount);
-                    numAmount = stof(amount);
+                                
+                                
+                                numAmount = Amount();
 
                     if (numAmount * 20 < one.getMoney() - bill)
                         one.setMaterialAmount(numAmount, "tongues");
@@ -213,9 +198,9 @@ void shop(Wagon one)
                 else if (choice == "4")
                 {
                     cout << "How many medKits do you want?" << endl;
-
-                    getline(cin, amount);
-                    numAmount = stof(amount);
+                    
+                    
+                    numAmount = Amount();
 
                     if (numAmount * 20 < one.getMoney() - bill)
                         one.setMaterialAmount(numAmount, "medkits");
@@ -238,7 +223,6 @@ void shop(Wagon one)
     }
     cout << one.getMoney() << endl;
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Misfortune()
@@ -300,10 +284,7 @@ int main()
     }
 //*********************************************************************************************************//
 
-
-
-    // shop();
-    // while (miles < 2048)  
+    // while (one.getMiles() < 2048)  
     // {
         
     // }

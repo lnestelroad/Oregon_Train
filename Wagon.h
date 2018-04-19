@@ -15,6 +15,7 @@ using namespace std;
 #include "Supplies.h"
 #include "WagonGang.h"
 #include "Date.h"
+#include "Auxiluary.h"
 
 #ifndef WAGON_H
 #define WAGON_H
@@ -29,6 +30,7 @@ class Wagon
         Date getTime();
         Gang getPersons(int);
         Supplies getMaterials(string);
+        Supplies getMaterials(int);
         float getMoney();
         int getMiles();
 
@@ -66,6 +68,8 @@ Wagon::Wagon()
         Gang person = Gang(companion);
         persons[i] = person;
     }
+
+    clear();
     ///////////////////////////////////////////////////////
     Supplies food = Supplies("food", 0.5);
         materials[0] = food;
@@ -133,6 +137,11 @@ Supplies Wagon::getMaterials(string name)
     }
 
     return materials[index];
+}
+
+Supplies Wagon::getMaterials(int i)
+{
+    return materials[i];
 }
 
 float Wagon::getMoney()
