@@ -13,7 +13,103 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void shop(Wagon one)
+int Split (string phrase, char div, string words[], int size)
+{
+	//words[size];
+    int wordCounter = 0;//this variable is initilized to count the amount of words in the phrase.
+    int stop = 0;//this varialbe is used to store the length of the substring depending on the iteration and the start position
+    int start = 0;//This variable is what determines where the substring will start.
+    int counter = 0;//this variable is what determines which element to store the substring in.
+
+    if (phrase.length() == 0)//This is used to determine whether or not anything was entered
+        return 0;//if nothing is entered, the function is returned 0
+
+    for (int i = 0; i <= phrase.length(); i++)//a for loop is created to run for the length of the phrase
+    {
+        if (phrase[i] == div || phrase[i] == '\0')//For every element of the phrase, this if statment is what determines whether it equals the special dividing character
+        {
+            stop = i - start;//here is where the length of the substring is determined. it takes the position of the start and subtracts it from the current element
+
+            string parse = phrase.substr(start, stop);//here is where the substring is made.
+            words[counter] = parse;//this array is where the substring is stored
+        
+            counter += 1;//here is where the element for the array is determined
+			wordCounter += 1;//this is the counter which counts the words
+            start = i + 1;//this is where the starting point for the next iteration is determined. Its found by storing the next position such that the special dividing character is not included
+        }
+    }
+    return wordCounter;//here is where the word count is returned.
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * After each stage/turn, any changes to the user data will be saved to a file so that it can be transfered to the next stage/turn.
+ */ 
+void saveData(Wagon one)
+{
+    ofstream save;
+    save.open("ProgressUpdate.txt");
+
+    if (save.is_open())
+    {   
+        //--------------------------------------------------------------//
+        for (int i = 0; i < 7; i++)
+        {
+            save << one.getMaterials(i).getAmount() << ' ';
+            save << one.getMaterials(i).getCost() << endl;
+        }
+        //--------------------------------------------------------------//
+        for (int i = 0; i < 5; i++)
+        {
+            save << one.getPersons(i).getAlive() << ' ';
+            save << one.getPersons(i).getSickDays() << endl;
+        }
+        //--------------------------------------------------------------//
+            save << one.getTime().getMonth() << ' ';
+            save << one.getTime().getDay() << ' ';
+            save << one.getTime().getYear() << endl;
+        //--------------------------------------------------------------//
+            save << one.getMoney() << endl;
+            save << one.getMiles() << endl;
+        //--------------------------------------------------------------//    
+    }
+    else
+    {
+        cout << "Failed to save." << endl;
+    }
+
+    save.close();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void loadData(Wagon one)
+{
+    ifstream load;
+    load.open("ProgressUpdate.txt");
+    string line = "";
+    string temp[5];
+    int counter = 0;
+
+    if (load.is_open())
+    {
+        while(getline(load, line))
+        {
+            Split(line, ' ', temp, 5);
+
+            if (counter > 7)
+            {   
+                int amount = stof(temp[0]);
+                one.setMaterialAmount(amount, counter);
+            }
+
+            counter++;
+        }
+    }
+    else 
+        cout << "failed to open" << endl;
+    
+    load.close();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Wagon shop(Wagon one)
 {
 //*********************************************************************************************************//
 /**
@@ -47,26 +143,26 @@ void shop(Wagon one)
 
         cout << "\nCurrent Items:\n" << endl;
 
-        cout << "1. Oxen           " << "$" << one.getMaterials("oxen").getCost() * one.getMaterials("oxen").getAmount() << endl;
-        cout << "2. Food           " << "$" << one.getMaterials("food").getCost() * one.getMaterials("food").getAmount() << endl;
-        cout << "3. Bullets        " << "$" << one.getMaterials("bullets").getCost() * one.getMaterials("bullets").getAmount() << endl;
-        cout << "4. Spare Parts    " << "$" << (one.getMaterials("wheels").getCost() * one.getMaterials("wheels").getAmount())
-                                      + (one.getMaterials("axles").getCost() * one.getMaterials("axles").getAmount())
-                                      + (one.getMaterials("tongues").getCost() * one.getMaterials("tongues").getAmount())
+        cout << "1. Oxen           " << "$" << one.getMaterials(0).getCost() * one.getMaterials(0).getAmount() << endl;
+        cout << "2. Food           " << "$" << one.getMaterials(1).getCost() * one.getMaterials(1).getAmount() << endl;
+        cout << "3. Bullets        " << "$" << one.getMaterials(2).getCost() * one.getMaterials(2).getAmount() << endl;
+        cout << "4. Spare Parts    " << "$" << (one.getMaterials(3).getCost() * one.getMaterials(3).getAmount())
+                                      + (one.getMaterials(4).getCost() * one.getMaterials(4).getAmount())
+                                      + (one.getMaterials(5).getCost() * one.getMaterials(5).getAmount())
                                       + (one.getMaterials(6).getCost() * one.getMaterials(6).getAmount()) << endl;
 
 //*********************************************************************************************************//
 /**
  * This block is used to calculate the total bill after each puchase
  */
-        bill = ((one.getMaterials("oxen").getAmount() * 40.0) 
-               +(one.getMaterials("food").getAmount() * 0.5)
-               +(one.getMaterials("bullets").getAmount() * 2.0)
-               +(one.getMaterials("wheels").getAmount() * 20.0)
-               +(one.getMaterials("axles").getAmount() * 20.0)
-               +(one.getMaterials("tongues").getAmount() * 20.0)
-               +(one.getMaterials("medkits").getAmount() * 0.0));
-        cout << "Your bill is: $" << bill << endl; 
+        bill = ((one.getMaterials(0).getAmount() * one.getMaterials(0).getCost()) 
+               +(one.getMaterials(1).getAmount() * one.getMaterials(1).getCost())
+               +(one.getMaterials(2).getAmount() * one.getMaterials(2).getCost())
+               +(one.getMaterials(3).getAmount() * one.getMaterials(3).getCost())
+               +(one.getMaterials(4).getAmount() * one.getMaterials(4).getCost())
+               +(one.getMaterials(5).getAmount() * one.getMaterials(5).getCost())
+               +(one.getMaterials(6).getAmount() * one.getMaterials(6).getCost()));
+        cout << "\nYour bill is: $" << bill << endl; 
 
         cout << "\nWhich item would you like to purchase?" << endl;
         cout << "Press 'q' to leave store." << endl;
@@ -79,7 +175,7 @@ void shop(Wagon one)
         {
             system("clear");
 
-            cout << "There are 2 oxen in a yoke and each yoke will cost $" << one.getMaterials("oxen").getCost() << endl;
+            cout << "There are 2 oxen in a yoke and each yoke will cost $" << one.getMaterials(0).getCost() << endl;
             cout << "Remember, you must spend $100-$200 on oxen." << endl;
             cout << "How many would you like to buy?" << endl;
 
@@ -88,8 +184,8 @@ void shop(Wagon one)
             
             numAmount = Amount();
 
-            if (numAmount * 40 < one.getMoney() - bill && numAmount * 40 >= 100 && numAmount <= 200)
-                one.setMaterialAmount(numAmount, "oxen");
+            if (numAmount * one.getMaterials(0).getCost() < one.getMoney() - bill && numAmount * one.getMaterials(0).getCost() >= 100 && numAmount * one.getMaterials(0).getCost() <= 200)
+                one.setMaterialAmount(numAmount, 0);
             else if (numAmount * 40 > one.getMoney())
                 cout << "Sorry sport, looks like you don't have enough!" << endl;
             else
@@ -107,13 +203,13 @@ void shop(Wagon one)
             system("clear");
 
             cout << "It is recommended that you bring at least 200 lbs. of food per person." << endl;
-            cout << "As of now, the price of food is " << one.getMaterials("food").getCost() << " cents per pound." << endl;
+            cout << "As of now, the price of food is " << one.getMaterials(1).getCost() << " cents per pound." << endl;
             cout << "How many pounds of food would you like to puchase?" << endl;                   
             
             numAmount = Amount();
 
-            if (numAmount * 0.5 < one.getMoney() - bill)
-                one.setMaterialAmount(numAmount, "food");
+            if (numAmount * one.getMaterials(1).getCost() < one.getMoney() - bill)
+                one.setMaterialAmount(numAmount, 1);
             else
                 cout << "Sorry buckaroo, looks like you don't have enough!" << endl;
         }
@@ -125,13 +221,13 @@ void shop(Wagon one)
         {
             system("clear");
 
-            cout << "Ammunition is sold in boxes of 20 bullets. Each box costs $" << one.getMaterials("bullets").getCost() << endl;
+            cout << "Ammunition is sold in boxes of 20 bullets. Each box costs $" << one.getMaterials(2).getCost() << endl;
             cout << "How many boxes do you want?" << endl;                  
             
             numAmount = Amount();
 
-            if (numAmount * 2 < one.getMoney() - bill)
-                one.setMaterialAmount(numAmount, "bullets");
+            if (numAmount * one.getMaterials(2).getCost() < one.getMoney() - bill)
+                one.setMaterialAmount(numAmount, 2);
             else
                 cout << "Sorry slugger, looks like you don't have enough!" << endl;
         }
@@ -147,10 +243,10 @@ void shop(Wagon one)
                 system("clear");
 
                 cout << "It's a food idea to have a few spare parts for your wagon. Here are the prices: " << endl;
-                cout << "1. Wheels     " << "$" << one.getMaterials("wheels").getCost() << " each"  << endl;
-                cout << "2. Axles      " << "$" << one.getMaterials("axles").getCost() << " each" << endl;
-                cout << "3. Tongues    " << "$" << one.getMaterials("tongues").getCost() << " each" << endl;
-                cout << "4. MedKits    " << "$" << one.getMaterials(6).getCost() << " each" << endl;
+                cout << "1. Wheels     " << "$" << one.getMaterials(3).getAmount() * one.getMaterials(3).getCost() << endl;
+                cout << "2. Axles      " << "$" << one.getMaterials(4).getAmount() * one.getMaterials(4).getCost() << endl;
+                cout << "3. Tongues    " << "$" << one.getMaterials(5).getAmount() * one.getMaterials(5).getCost() << endl;
+                cout << "4. MedKits    " << "$" << one.getMaterials(6).getAmount() * one.getMaterials(6).getCost() << endl;
 
                 cout << "\nWhich item would you like to purchase?" << endl;
                 cout << "press 'q' to return to the store" << endl;
@@ -163,8 +259,8 @@ void shop(Wagon one)
                     
                     numAmount = Amount();
 
-                    if (numAmount * 20 < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, "wheels");
+                    if (numAmount * one.getMaterials(3).getCost() < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, 3);
                     else
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
                 }
@@ -176,8 +272,8 @@ void shop(Wagon one)
                     
                     numAmount = Amount();
 
-                    if (numAmount * 20 < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, "axles");
+                    if (numAmount * one.getMaterials(4).getCost() < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, 4);
                     else
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
                 }
@@ -189,8 +285,8 @@ void shop(Wagon one)
                                 
                                 numAmount = Amount();
 
-                    if (numAmount * 20 < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, "tongues");
+                    if (numAmount * one.getMaterials(5).getCost() < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, 5);
                     else
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
                 }
@@ -202,8 +298,8 @@ void shop(Wagon one)
                     
                     numAmount = Amount();
 
-                    if (numAmount * 20 < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, "medkits");
+                    if (numAmount * one.getMaterials(6).getCost() < one.getMoney() - bill)
+                        one.setMaterialAmount(numAmount, 6);
                     else
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
                 }
@@ -221,8 +317,23 @@ void shop(Wagon one)
             break;
         }
     }
-    cout << one.getMoney() << endl;
+    system("clear");
+    saveData(one);
+    return one;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Display(Wagon one)
+{
+    cout << "Today is " << one.getTime().getMonth() << ' ' << one.getTime().getDay() << ", " << one.getTime().getYear() << endl;
+    cout << "\n   Miles traveled: " << one .getMiles() << " miles" << endl;
+    cout <<   "   Next landmark:  0" << " miles" << endl;
+    cout <<   "   Food:           " << one .getMaterials(0).getAmount() << " lbs." << endl;
+    cout <<   "   Bullets left:   " << one.getMaterials(1).getAmount() << endl;
+    cout <<   "   Money left:     $" << one.getMoney() << endl;
+
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Misfortune()
@@ -246,15 +357,6 @@ void raiders()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void menu()
-{
-    //here is where each turn will be simulatied.
-    //the user will be given every option through thise function.
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 int main()
 {
     string enter = "";
@@ -280,13 +382,16 @@ int main()
     getline(cin, enter);  //takes in the users enter from the terminal
     if (enter.length() == 0)  //makes sure the users input was an enter
     {
-        shop(one);  //the function takes the play into the shop function.
+        Wagon one = shop(one);  //the function takes the play into the shop function.
     }
+
+    cout << one.getMaterials(1).getAmount() << endl;
 //*********************************************************************************************************//
 
-    // while (one.getMiles() < 2048)  
-    // {
-        
-    // }
+    while (one.getMiles() < 2048)  
+    {
+        Display(one);
+        clear();
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

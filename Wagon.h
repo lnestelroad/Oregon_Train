@@ -29,12 +29,19 @@ class Wagon
 
         Date getTime();
         Gang getPersons(int);
-        Supplies getMaterials(string);
         Supplies getMaterials(int);
         float getMoney();
         int getMiles();
 
-        void setMaterialAmount(int, string);
+        void setMaterialAmount(int, int);
+        void setMaterialCost(int, int);
+
+        void setPersonsAlive(int,bool);
+        void setPersonsSickDays(int, int);
+
+        void setTimeMonth(string);
+        void setTimeDay(int);
+        
         void setMoney(float);
         void setMiles(int);
 
@@ -71,21 +78,21 @@ Wagon::Wagon()
 
     clear();
     ///////////////////////////////////////////////////////
-    Supplies food = Supplies("food", 0.5);
-        materials[0] = food;
-    Supplies bullets = Supplies("bullets", 2);
-        materials[1] = bullets;
-    Supplies oxen = Supplies("oxen", 40);
-        materials[2] = oxen;
+    Supplies oxen("oxen", 40);
+        materials[0] = oxen;
+    Supplies food("food", 0.5);
+        materials[1] = food;
+    Supplies bullets("bullets", 2);
+        materials[2] = bullets;
 
-    Supplies wheels = Supplies("wheels", 20);
+    Supplies wheels("wheels", 20);
         materials[3] = wheels;
-    Supplies axles = Supplies("axles", 20);
+    Supplies axles("axles", 20);
         materials[4] = axles;
-    Supplies tongues = Supplies("tongues", 20);
+    Supplies tongues("tongues", 20);
         materials[5] = tongues;
 
-    Supplies medKit = Supplies("medKit", 25);
+    Supplies medKit("medKit", 25);
         materials[6] = medKit;
     //////////////////////////////////////////////////////
     string choice;
@@ -124,21 +131,6 @@ Gang Wagon::getPersons(int index)
     return persons[index];
 }
 
-Supplies Wagon::getMaterials(string name)
-{
-    int index = 0;
-
-    for (int i = 0; i < 7; i++)
-    {
-        if(name == materials[i].getName())
-        {
-            index = i;
-        }
-    }
-
-    return materials[index];
-}
-
 Supplies Wagon::getMaterials(int i)
 {
     return materials[i];
@@ -154,18 +146,8 @@ int Wagon::getMiles()
     return miles;
 }
 
-void Wagon::setMaterialAmount(int newAmount, string name)
+void Wagon::setMaterialAmount(int newAmount, int index)
 {
-    int index = 0;
-
-    for (int i = 0; i < 7; i++)
-    {
-        if(name == materials[i].getName())
-        {
-            index = i;
-        }
-    }
-
     materials[index].setAmount(newAmount);
 }
 
