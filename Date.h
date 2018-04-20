@@ -36,6 +36,7 @@ class Date
         string month;
         int year;
 
+        
 };
 
 #endif 
@@ -71,7 +72,27 @@ int Date::getYear()
 
 void Date::setDay(int newDay)
 {
-    day = newDay;
+    string CurrentMonth = getMonth();
+
+    if(CurrentMonth == "March"  || 
+       CurrentMonth == "May"    || 
+       CurrentMonth == "July"   || 
+       CurrentMonth == "August" || 
+       CurrentMonth == "October")
+    {
+        if (newDay >= 1 && newDay <= 31)
+            day = newDay;
+        else
+            cout << "NOOOOOOOO!" << endl;
+    }
+    else
+    {
+        if (newDay >= 1 && newDay <= 30)
+            day = newDay;
+        else
+            cout << "NOOOOOOOOOOO!" << endl;
+    }
+    
 }
 
 void Date::setMonth(string newMonth)

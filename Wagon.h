@@ -36,7 +36,7 @@ class Wagon
         void setMaterialAmount(int, int);
         void setMaterialCost(int, int);
 
-        void setPersonsAlive(int,bool);
+        void setPersonsAlive(bool, int);
         void setPersonsSickDays(int, int);
 
         void setTimeMonth(string);
@@ -149,6 +149,31 @@ int Wagon::getMiles()
 void Wagon::setMaterialAmount(int newAmount, int index)
 {
     materials[index].setAmount(newAmount);
+}
+
+void Wagon::setMaterialCost(int newAmount, int index)
+{
+    materials[index].setAmount(newAmount);
+}
+
+void Wagon::setPersonsAlive(bool alive, int index)
+{
+    persons[index].setAlive(alive);
+}
+
+void Wagon::setPersonsSickDays(int days, int index)
+{
+    persons[index].setSickDays(days);
+}
+
+void Wagon::setTimeMonth(string month)
+{
+    time.setMonth(month);
+}
+
+void Wagon::setTimeDay(int day)
+{
+    time.setDay(day);
 }
 
 void Wagon::setMoney(float newMoney)

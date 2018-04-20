@@ -13,34 +13,6 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int Split (string phrase, char div, string words[], int size)
-{
-	//words[size];
-    int wordCounter = 0;//this variable is initilized to count the amount of words in the phrase.
-    int stop = 0;//this varialbe is used to store the length of the substring depending on the iteration and the start position
-    int start = 0;//This variable is what determines where the substring will start.
-    int counter = 0;//this variable is what determines which element to store the substring in.
-
-    if (phrase.length() == 0)//This is used to determine whether or not anything was entered
-        return 0;//if nothing is entered, the function is returned 0
-
-    for (int i = 0; i <= phrase.length(); i++)//a for loop is created to run for the length of the phrase
-    {
-        if (phrase[i] == div || phrase[i] == '\0')//For every element of the phrase, this if statment is what determines whether it equals the special dividing character
-        {
-            stop = i - start;//here is where the length of the substring is determined. it takes the position of the start and subtracts it from the current element
-
-            string parse = phrase.substr(start, stop);//here is where the substring is made.
-            words[counter] = parse;//this array is where the substring is stored
-        
-            counter += 1;//here is where the element for the array is determined
-			wordCounter += 1;//this is the counter which counts the words
-            start = i + 1;//this is where the starting point for the next iteration is determined. Its found by storing the next position such that the special dividing character is not included
-        }
-    }
-    return wordCounter;//here is where the word count is returned.
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * After each stage/turn, any changes to the user data will be saved to a file so that it can be transfered to the next stage/turn.
  */ 
@@ -322,20 +294,75 @@ Wagon shop(Wagon one)
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void Display(Wagon one)
+Wagon Stop(Wagon one)
 {
+    system("clear");
+
+    cout << "stop" << endl;
+    return one;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Wagon Continue(Wagon one)
+{
+    system("clear");
+
+    cout << "continue" << endl;
+    return one;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Wagon Hunt(Wagon one)
+{
+    system("clear");
+
+    cout << "Hunt" << endl;
+    return one;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Wagon Quit(Wagon one)
+{
+    system("clear");
+
+    cout << "quit" << endl;
+    return one;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Wagon Display(Wagon one)
+{
+    string choice = "";
+
     cout << "Today is " << one.getTime().getMonth() << ' ' << one.getTime().getDay() << ", " << one.getTime().getYear() << endl;
-    cout << "\n   Miles traveled: " << one .getMiles() << " miles" << endl;
+    cout << "\n   Miles traveled: " << one.getMiles() << " miles" << endl;
     cout <<   "   Next landmark:  0" << " miles" << endl;
-    cout <<   "   Food:           " << one .getMaterials(0).getAmount() << " lbs." << endl;
-    cout <<   "   Bullets left:   " << one.getMaterials(1).getAmount() << endl;
+    cout <<   "   Food:           " << one.getMaterials(1).getAmount() << " lbs." << endl;
+    cout <<   "   Bullets left:   " << one.getMaterials(2).getAmount() << endl;
     cout <<   "   Money left:     $" << one.getMoney() << endl;
 
+    cout << "\n\nHow would you like to proceed?\n" << endl;
+    cout << "1. Stop and rest" << endl;
+    cout << "2. Continue on the trial" << endl;
+    cout << "3. Hunt for food" << endl;
+    cout << "4. Quit" << endl;
+
+    getline(cin, choice);
+    if(choice == "1")
+    {
+        one = Stop(one);
+    }
+    else if (choice == "2")
+    {
+        one = Continue(one);
+    }
+    else if(choice == "3")
+    {
+        one = Hunt(one);
+    }
+    else if(choice == "4")
+    {
+        one = Quit(one);
+    }
+    return one;
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void Misfortune()
 { 
     //this function will simulate the misfortune chance and the puzzles.
@@ -382,15 +409,17 @@ int main()
     getline(cin, enter);  //takes in the users enter from the terminal
     if (enter.length() == 0)  //makes sure the users input was an enter
     {
-        Wagon one = shop(one);  //the function takes the play into the shop function.
+        one = shop(one);  //the function takes the play into the shop function and then overloads the wagon object so data is saved
     }
-
-    cout << one.getMaterials(1).getAmount() << endl;
+    for (int i = 0; i < 7; i++)
+    {
+        cout << one.getMaterials(i).getAmount() << endl;
+    }
 //*********************************************************************************************************//
 
     while (one.getMiles() < 2048)  
     {
-        Display(one);
+        one = Display(one);
         clear();
     }
 }
