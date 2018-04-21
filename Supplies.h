@@ -15,6 +15,13 @@ using namespace std;
 #ifndef SUPPLIES_H
 #define SUPPLIES_H
 
+
+/**
+ * Class: this class is used to house supplies and thier attributes.
+ * Member Functions: 2 constructors, 1 defult and 1 custom.
+ *                   3 getters and setter for each data memeber
+ * Data Members: a name, an amount, and a cost 
+ */
 class Supplies
 {
     public: 

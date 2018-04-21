@@ -15,6 +15,13 @@ using namespace std;
 #ifndef DATE_H
 #define DATE_H
 
+/**
+ * Class: this class is used to house the date.
+ * Member Functions: 2 constructors, 1 defult and 1 custom.
+ *                   3 getters and setter for each data memeber
+ *                   1 helper function for the setDay function.
+ * Data Members: a day, a month, and a year 
+ */
 class Date
 { 
     public:

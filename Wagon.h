@@ -16,10 +16,18 @@ using namespace std;
 #include "WagonGang.h"
 #include "Date.h"
 #include "Auxiluary.h"
+#include "milestone.h"
 
 #ifndef WAGON_H
 #define WAGON_H
 
+/**
+ * Class: this class is used to house the Wagon class. Here, all other class objects will 
+ *        be stored/modified
+ * Member Functions: 1 constructors.
+ *                   5 getters, one for each data member, some requiring an index for the array. 
+ * Data Members: a name, an amount, and a cost 
+ */
 class Wagon
 {
     public:
@@ -32,6 +40,7 @@ class Wagon
         Supplies getMaterials(int);
         float getMoney();
         int getMiles();
+        Milestone getCheckPoint();
 
         void setMaterialAmount(int, int);
         void setMaterialCost(int, int);
@@ -45,6 +54,8 @@ class Wagon
         void setMoney(float);
         void setMiles(int);
 
+        void setCheckPoint();
+
     private:
 
         Date time;
@@ -52,6 +63,7 @@ class Wagon
         Supplies materials[7];
         float money;
         int miles;
+        Milestone checkPoint;
 };
 
 #endif
@@ -117,6 +129,7 @@ Wagon::Wagon()
         Date today = Date();
     }
     //////////////////////////////////////////////////////
+    Milestone checkPoint;
     money = 1200;
     miles = 0;
 }
@@ -144,6 +157,11 @@ float Wagon::getMoney()
 int Wagon::getMiles()
 {
     return miles;
+}
+
+Milestone Wagon::getCheckPoint()
+{
+    return checkPoint;
 }
 
 void Wagon::setMaterialAmount(int newAmount, int index)
@@ -184,6 +202,11 @@ void Wagon::setMoney(float newMoney)
 void Wagon::setMiles(int newMiles)
 {
     miles = newMiles;
+}
+
+void Wagon::setCheckPoint()
+{
+    checkPoint.setInfo();
 }
 
 Wagon::~Wagon()

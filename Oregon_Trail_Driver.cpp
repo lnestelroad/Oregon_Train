@@ -9,7 +9,7 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 #include <iostream>
 #include <string> 
 #include <fstream>
-#include <ctime>
+#include <vector>
 #include "Wagon.h"
 using namespace std;
 
@@ -20,30 +20,14 @@ using namespace std;
 void saveData(Wagon one)
 {
     ofstream save;
-    save.open("ProgressUpdate.txt");
+    save.open("results.txt");
 
     if (save.is_open())
     {   
-        //--------------------------------------------------------------//
-        for (int i = 0; i < 7; i++)
-        {
-            save << one.getMaterials(i).getAmount() << ' ';
-            save << one.getMaterials(i).getCost() << endl;
-        }
-        //--------------------------------------------------------------//
-        for (int i = 0; i < 5; i++)
-        {
-            save << one.getPersons(i).getAlive() << ' ';
-            save << one.getPersons(i).getSickDays() << endl;
-        }
-        //--------------------------------------------------------------//
-            save << one.getTime().getMonth() << ' ';
-            save << one.getTime().getDay() << ' ';
-            save << one.getTime().getYear() << endl;
-        //--------------------------------------------------------------//
-            save << one.getMoney() << endl;
-            save << one.getMiles() << endl;
-        //--------------------------------------------------------------//    
+        save << "Leaders name: " << one.getPersons(0).getName() << endl;
+        save << "Miles Travelled: " << one.getMiles();
+        save << "Food Remaining: " << one.getMaterials(1).getAmount() << endl;
+        save << "Cash Remaining: " << one.getMoney();  
     }
     else
     {
@@ -295,6 +279,22 @@ Wagon shop(Wagon one)
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void progressUpdate(Wagon one)
+{
+    if(one.getMaterials(1).getAmount() == 0  || 
+       one.getPersons(0).getAlive() == false ||
+       one.getMaterials(0).getAmount() == 0 )  //needs wagon status!!
+    {
+        cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
+        cout << "Leaders name: " << one.getPersons(0).getName() << endl;
+        cout << "Miles Travelled: " << one.getMiles() << endl;
+        cout << "Food Remaining: " << one.getMaterials(1).getAmount() << endl;
+        cout << "Cash Remaining: " << one.getMoney() << endl;
+        saveData(one);
+        exit(0);
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** 
  * This is the function which allows to user to select how many days they wish to wait.
  */
@@ -325,13 +325,164 @@ Wagon Stop(Wagon one)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Continue(Wagon one)
 {
-    system("clear");
+    system("clear");  // the terminal is cleared for the next turn/screen
 
     one.setTimeDay(14);  //sets the date to 2 weeks in the futur
     one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * 14), 1);  //Removes 3 lbs. of food per day
-    one.setMiles(one.getMiles() + randomNumbers(70, 140));
+    one.setMiles(one.getMiles() + randomNumbers(70, 140));  //the miles is increased from where the turn started to where it ended.
 
-    return one;
+    if (one.getMiles() >= one.getCheckPoint().getMiles())  //check to see if the player is at a milestone
+    {
+        cout << "You have reached the " << one.getCheckPoint().getName() << endl; 
+        one.setMiles(one.getCheckPoint().getMiles());  //sets the miles travelled to where the milestone is so that the player cannot go past it.
+        
+        if (one.getCheckPoint().getType() == "m")  //check to see if the milestone is a rock
+        {
+            cout << "You can either (1)rest here or (2)continue on." << endl;  //tells the user thier options
+            float choice = Amount();
+
+            while(true)  //runs until the user picks 1 or 2
+            {
+                if (choice == 1)  //check to see if the choice is 1
+                {
+                    Stop(one);  //if it is, the function goes to the stop function
+                    one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                    break;  //the loop breaks
+                }
+                else if (choice == 2)
+                {
+                    one.setTimeDay(14);  //sets the date to 2 weeks in the futur
+                    one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * 14), 1);  //Removes 3 lbs. of food per day
+                    one.setMiles(one.getMiles() + randomNumbers(70, 140));  //the miles is increased from where the turn started to where it ended.
+                    break; //the loop breaks
+                }
+                else
+                    cout << "Invalid choice, please try again." << endl;  //tells the user to try again
+            }
+        }
+
+        else if (one.getCheckPoint().getType() == "f")  //check to see if the milestone is a fort
+        {
+            cout << "You can either (1)rest here (2)continue on or (3)shop" << endl;  //tells the user thier options
+            float choice = Amount();  //the user is asked to chose.
+
+            while(true)  //runs until the user picks 1 or 2
+            {
+                if (choice == 1)  //check to see if the choice is 1
+                {
+                    Stop(one);  //if it is, the function goes to the stop function
+                    one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                    break;  //the loop breaks
+                }
+                else if (choice == 2)  //check to see if the user wants to continue
+                {
+                    one.setTimeDay(14);  //sets the date to 2 weeks in the futur
+                    one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * 14), 1);  //Removes 3 lbs. of food per day
+                    one.setMiles(one.getMiles() + randomNumbers(70, 140));  //the miles is increased from where the turn started to where it ended.
+                    break; //the loop breaks
+                }
+                else if(choice == 3)  //checks to see if the user wants to shop
+                {
+                    if (one.getMiles() >= 304 && one.getMiles() < 640)
+                    {
+                        for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
+                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 1.25);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        shop(one);  //user is taken to the shop
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break; //the loop breaks
+                    }
+                    else if (one.getMiles() >= 640 && one.getMiles() < 989)  //determines where the user is on the trail.                   
+                    {
+                        for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
+                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 1.50);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        shop(one);  //user is taken to the shop
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break; //the loop breaks
+                    }
+                    else if (one.getMiles() >= 989 && one.getMiles() < 1395)  //determines where the user is on the trail.                    
+                    {
+                        for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
+                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 1.75);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        shop(one);  //user is taken to the shop
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break; //the loop breaks
+                    }
+                    else if (one.getMiles() >= 1395 && one.getMiles() < 1648)  //determines where the user is on the trail.
+                    {
+                        for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
+                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 2);  //sets the materials cost to a higher value depended on where in the trail the user is                      
+                        shop(one);  //user is taken to the shop
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break; //the loop breaks
+                    }
+                    else if (one.getMiles() >= 1648 && one.getMiles() < 1863)  //determines where the user is on the trail.
+                    {
+                        for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
+                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 2.25);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        shop(one);  //user is taken to the shop
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break; //the loop breaks
+                    }
+                }
+                else
+                    cout << "Invalid choice, please try again." << endl;  //tells the user to try again
+            }
+        }
+
+        else if (one.getCheckPoint().getType() == "r")  //check to see if the milestone is a river
+        {
+            if (one.getMiles() != 185)
+            {
+                cout << "You can either (1)rest here or (2)cross the river by fairy ($10 dollars)." << endl;  //tells the user thier options
+                float choice = Amount();  ////the user is asked to chose.
+
+                while(true)  //runs until the user picks 1 or 2
+                {
+                    if (choice == 1)  //check to see if the choice is 1
+                    {
+                        Stop(one);  //if it is, the function goes to the stop function
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break;  //the loop breaks
+                    }
+                    else if (choice == 2)
+                    {
+                        one.setMoney(one.getMoney() - 10);
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break; //the loop breaks
+                    }
+                    else
+                        cout << "Invalid choice, please try again." << endl;  //tells the user to try again
+                }
+            }
+            else
+            {
+                cout << "You can either (1)rest here or (2)continue on." << endl;  //tells the user thier options
+                float choice = Amount();
+
+                while(true)  //runs until the user picks 1 or 2
+                {
+                    if (choice == 1)  //check to see if the choice is 1
+                    {
+                        Stop(one);  //if it is, the function goes to the stop function
+                        one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
+                        break;  //the loop breaks
+                    }
+                    else if (choice == 2)
+                    {
+                        one.setTimeDay(14);  //sets the date to 2 weeks in the futur
+                        one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * 14), 1);  //Removes 3 lbs. of food per day
+                        one.setMiles(one.getMiles() + randomNumbers(70, 140));  //the miles is increased from where the turn started to where it ended.
+                        break; //the loop breaks
+                    }
+                    else
+                        cout << "Invalid choice, please try again." << endl;  //tells the user to try again
+                }
+            }
+        }
+        one.setCheckPoint();  //each element in the milestone arrays are shifted down one.
+    }
+
+    return one;  //returns the changes to the object
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Hunt(Wagon one)
@@ -352,8 +503,9 @@ Wagon Quit(Wagon one)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Display(Wagon one)
 {
-    string choice = "";
+    string choice = "";  //initilizes a variable for the user to enter a choice 
 
+    //the following 6 lines prints out the date, the miles travelled, the distance till the next landmark, and the food, bullets, and money remaining
     cout << "Today is " << one.getTime().getMonth() << ' ' << one.getTime().getDay() << ", " << one.getTime().getYear() << endl;
     cout << "\n   Miles traveled: " << one.getMiles() << " miles" << endl;
     cout <<   "   Next landmark:  0" << " miles" << endl;
@@ -361,30 +513,32 @@ Wagon Display(Wagon one)
     cout <<   "   Bullets left:   " << one.getMaterials(2).getAmount() << endl;
     cout <<   "   Money left:     $" << one.getMoney() << endl;
 
+    //the following lines display the options avaliabe to the user.
     cout << "\n\nHow would you like to proceed?\n" << endl;
     cout << "1. Stop and rest" << endl;
     cout << "2. Continue on the trial" << endl;
     cout << "3. Hunt for food" << endl;
     cout << "4. Quit" << endl;
 
+    //here is here the users choice is sorted
     getline(cin, choice);
-    if(choice == "1")
+    if(choice == "1")  //determines if the user will want to stop
     {
-        one = Stop(one);
+        one = Stop(one);  //takes the user to the stop function
     }
-    else if (choice == "2")
+    else if (choice == "2")  //determines if the user will want to continue
     {
-        one = Continue(one);
+        one = Continue(one);  //takes the user to the continue function
     }
-    else if(choice == "3")
+    else if(choice == "3")  //determines if the user will want to Hunt
     {
-        one = Hunt(one);
+        one = Hunt(one);  //takes the user to the Hunt function
     }
-    else if(choice == "4")
+    else if(choice == "4")  //determines if the user will want to Quit
     {
-        one = Quit(one);
+        one = Quit(one);  //takes the user to the quit function
     }
-    return one;
+    return one;  //all data changed in the one class is returned to the main function
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Misfortune()
@@ -425,6 +579,7 @@ int main()
  */
     system("clear");
 
+    //the following 4 lines of code are just a message to the play informing them about the shop
     cout << "Before leaving Independence, you should consider buying supplies." << endl;
     cout << "After buying your wagon, you have $1000 left to spend in the shop." << endl;
     cout << "All of the neccessary materials can be found there, but you do not need to spend all of your money now." << endl;
@@ -437,10 +592,26 @@ int main()
     }
 //*********************************************************************************************************//
 
-    while (one.getMiles() < 2048)  
+    while (one.getMiles() < 2048)  //this checks after each turn the amount of miles travled to determine if the player has made it to the end
     {
-        one = Display(one);
-        clear();
+        one = Display(one);  //after each turn the date is passed back into the one object.
+                                                // the new data is then passed right back into the display function for the next turn.
+
+        //this if statement checks after each turn whether or not they play meets any of the conditions which ends the game
+        if(one.getMaterials(1).getAmount() <= 0  || 
+           one.getPersons(0).getAlive() == false ||
+           one.getMaterials(0).getAmount() == 0 )  //needs wagon status!!
+        {
+            // the following lines of code display the users status if they have failed and that they died
+            cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
+            cout << "Leaders name: " << one.getPersons(0).getName() << endl;
+            cout << "Miles Travelled: " << one.getMiles() << endl;
+            cout << "Food Remaining: 0" << endl;
+            cout << "Cash Remaining: " << one.getMoney() << endl;
+            saveData(one);  //the player status is also printed out to a results file
+            exit(0);  //the entire program is ended 
+        }
+        clear();  //after each turn, the screen is cleared.
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -15,6 +15,12 @@ using namespace std;
 #ifndef WAGONGANG_H
 #define WAGONGANG_H
 
+/**
+ * Class: this class is used to house the people and thier attributes.
+ * Member Functions: 2 constructors, 1 defult and 1 custom.
+ *                   3 getters and setter for each data memeber
+ * Data Members: a name, living status, and the amount of days a person has been sick 
+ */
 class Gang
 {
     public:

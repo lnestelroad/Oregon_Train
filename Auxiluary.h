@@ -9,6 +9,7 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 #include <iostream>
 #include <string> 
 #include <fstream>
+#include <vector>
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,52 +96,6 @@ int Split (string phrase, char div, string words[], int size)
         }
     }
     return wordCounter;//here is where the word count is returned.
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-string checkPoint(int info)
-{
-    ifstream check;
-    check.open("milestones.txt");
-    string line = "";
-
-    string temp[2];
-    string temp2[3];
-
-    string Name[15];
-    string distance[15];
-    string type[15];
-    string depth[15];
-
-    int counter = 0;
-
-    if (check.is_open())
-    {
-        while(getline(check, line))
-        {
-            Split(line, ',', temp, 2);
-            Split(temp[1], ' ', temp2, 3);
-
-            Name[counter] = temp[0];
-            distance[counter] = temp2[0];
-
-            if(temp2[1].length() != 0)
-                type[counter] = temp2[1];
-            else
-                type[counter] = "Landmark";
-
-            if(temp2[2].length() != 0)
-            {
-                depth[counter] = temp2[2];
-            }
-        }
-    }
-
-    // if(info = 1)
-    // {
-    //     return
-    // }
-    // return checkPoint;
-    return 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int randomNumbers(int min, int max)
