@@ -37,35 +37,6 @@ void saveData(Wagon one)
     save.close();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void loadData(Wagon one)
-{
-    ifstream load;
-    load.open("ProgressUpdate.txt");
-    string line = "";
-    string temp[5];
-    int counter = 0;
-
-    if (load.is_open())
-    {
-        while(getline(load, line))
-        {
-            Split(line, ' ', temp, 5);
-
-            if (counter > 7)
-            {   
-                int amount = stof(temp[0]);
-                one.setMaterialAmount(amount, counter);
-            }
-
-            counter++;
-        }
-    }
-    else 
-        cout << "failed to open" << endl;
-    
-    load.close();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon shop(Wagon one)
 {
     //*********************************************************************************************************//
@@ -94,6 +65,8 @@ Wagon shop(Wagon one)
     float numAmount;  //casted form of the amoun variable
     float bill = 0.0;  //sets the intial bill to $0.
 
+    Supplies storeTemp();
+
     while (true)  //runs indefinatly or until q is chosen (contains a break command)
     {
         system("clear");
@@ -120,6 +93,7 @@ Wagon shop(Wagon one)
                +(one.getMaterials(5).getAmount() * one.getMaterials(5).getCost())
                +(one.getMaterials(6).getAmount() * one.getMaterials(6).getCost()));
         cout << "\nYour bill is: $" << bill << endl; 
+        cout << "After payment, you will have $" << one.getMoney() - bill << endl;
 
         cout << "\nWhich item would you like to purchase?" << endl;
         cout << "Press 'q' to leave store." << endl;
@@ -613,5 +587,7 @@ int main()
         }
         clear();  //after each turn, the screen is cleared.
     }
+    cout << "Congradulations! You have made it to Oregon!" << endl;
+    saveData(one);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
