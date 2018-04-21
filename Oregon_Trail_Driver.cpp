@@ -9,6 +9,7 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 #include <iostream>
 #include <string> 
 #include <fstream>
+#include <ctime>
 #include "Wagon.h"
 using namespace std;
 
@@ -83,10 +84,10 @@ void loadData(Wagon one)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon shop(Wagon one)
 {
-//*********************************************************************************************************//
-/**
- * Prints out what the user will need and the use of each object from a seperate file.
- */
+    //*********************************************************************************************************//
+    /** 
+     * Prints out what the user will need and the use of each object from a seperate file.
+     */
     
     ifstream storeScript;
     storeScript.open("store.txt");
@@ -99,11 +100,11 @@ Wagon shop(Wagon one)
     }
     storeScript.close();
     clear();
-//*********************************************************************************************************//
-/**
- * prints off the current items in the users shopping cart along with the bill for each item
- * and askes what the user would like to buy next
- */
+    //*********************************************************************************************************//
+    /**
+     * prints off the current items in the users shopping cart along with the bill for each item
+     * and askes what the user would like to buy next
+     */
     string choice = "";
     string amount = "";
     float numAmount;  //casted form of the amoun variable
@@ -123,10 +124,10 @@ Wagon shop(Wagon one)
                                       + (one.getMaterials(5).getCost() * one.getMaterials(5).getAmount())
                                       + (one.getMaterials(6).getCost() * one.getMaterials(6).getAmount()) << endl;
 
-//*********************************************************************************************************//
-/**
- * This block is used to calculate the total bill after each puchase
- */
+    //*********************************************************************************************************//
+    /**
+     * This block is used to calculate the total bill after each puchase
+     */
         bill = ((one.getMaterials(0).getAmount() * one.getMaterials(0).getCost()) 
                +(one.getMaterials(1).getAmount() * one.getMaterials(1).getCost())
                +(one.getMaterials(2).getAmount() * one.getMaterials(2).getCost())
@@ -139,10 +140,10 @@ Wagon shop(Wagon one)
         cout << "\nWhich item would you like to purchase?" << endl;
         cout << "Press 'q' to leave store." << endl;
         getline(cin, choice);
-//*********************************************************************************************************//
-/**
- * This block is the branch for if the user elects to buy oxen
- */
+        //*********************************************************************************************************//
+        /**
+         * This block is the branch for if the user elects to buy oxen
+         */
         if (choice == "1")
         {
             system("clear");
@@ -166,10 +167,10 @@ Wagon shop(Wagon one)
                 clear();
             }
         }
-//*********************************************************************************************************//
-/**
- * This block is the branch for if the user elects to buy food
- */
+        //*********************************************************************************************************//
+        /**
+         * This block is the branch for if the user elects to buy food
+         */
         else if (choice == "2")
         {
             system("clear");
@@ -185,10 +186,10 @@ Wagon shop(Wagon one)
             else
                 cout << "Sorry buckaroo, looks like you don't have enough!" << endl;
         }
-//*********************************************************************************************************//  
-/**
- * This block is the branch for if the user elects to buy bullets
- */
+        //*********************************************************************************************************//  
+        /**
+         * This block is the branch for if the user elects to buy bullets
+         */
         else if (choice == "3")
         {
             system("clear");
@@ -203,11 +204,11 @@ Wagon shop(Wagon one)
             else
                 cout << "Sorry slugger, looks like you don't have enough!" << endl;
         }
-//*********************************************************************************************************// 
-/**
- * This block is the branch for if the user elects to buy spare parts. The function will take the user into a 
- * new menu function like the supplies menu.
- */
+        //*********************************************************************************************************// 
+        /**
+         * This block is the branch for if the user elects to buy spare parts. The function will take the user into a 
+         * new menu function like the supplies menu.
+         */
         else if (choice == "4")
         {
             while(true)
@@ -279,10 +280,10 @@ Wagon shop(Wagon one)
                     break;
             }
         }
-//*********************************************************************************************************// 
-/**
- * This block is the branch for if the user elects to leave the shop
- */      
+        //*********************************************************************************************************// 
+        /**
+         * This block is the branch for if the user elects to leave the shop
+         */
         else if (choice == "q")
         {
             one.setMoney(1000.0 - bill);  //1000 because 200 was spent on the wagon itself.
@@ -294,19 +295,42 @@ Wagon shop(Wagon one)
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** 
+ * This is the function which allows to user to select how many days they wish to wait.
+ */
 Wagon Stop(Wagon one)
 {
-    system("clear");
+    system("clear");  //clears the consol
 
-    cout << "stop" << endl;
-    return one;
+    string DaysToWait;  //stores the time to wait as a string
+    float waitTime = 0;  //store the time to wait as an int
+
+    cout << "How many days would you like to rest?" << endl;  //asks the user how long to wait.
+    waitTime = Amount();  //has the user input an amount using the Amount function.
+
+    one.setTimeDay(waitTime);  //sets the date to however many days the player chose to wait
+    one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * waitTime), 1);  //Removes 3 lbs. of food per day
+    
+    if (waitTime >= 2)  //checks to see if the wait time is larger than 2
+    {
+        for (int i = 0; i < 5; i++)  //runs through every memeber on the wagon
+        {
+            if (one.getPersons(i).getSickDays() != 0)  //checks for any sick members
+                one.setPersonsSickDays(0, i);  //resets the time a person has been sick thus making them healthy
+        }
+    }
+
+    return one;  //returns the changes to the object
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Continue(Wagon one)
 {
     system("clear");
 
-    cout << "continue" << endl;
+    one.setTimeDay(14);  //sets the date to 2 weeks in the futur
+    one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * 14), 1);  //Removes 3 lbs. of food per day
+    one.setMiles(one.getMiles() + randomNumbers(70, 140));
+
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,10 +434,6 @@ int main()
     if (enter.length() == 0)  //makes sure the users input was an enter
     {
         one = shop(one);  //the function takes the play into the shop function and then overloads the wagon object so data is saved
-    }
-    for (int i = 0; i < 7; i++)
-    {
-        cout << one.getMaterials(i).getAmount() << endl;
     }
 //*********************************************************************************************************//
 

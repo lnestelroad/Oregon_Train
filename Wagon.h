@@ -39,7 +39,7 @@ class Wagon
         void setPersonsAlive(bool, int);
         void setPersonsSickDays(int, int);
 
-        void setTimeMonth(string);
+        void setTimeMonth(int);
         void setTimeDay(int);
         
         void setMoney(float);
@@ -166,7 +166,7 @@ void Wagon::setPersonsSickDays(int days, int index)
     persons[index].setSickDays(days);
 }
 
-void Wagon::setTimeMonth(string month)
+void Wagon::setTimeMonth(int month)
 {
     time.setMonth(month);
 }
