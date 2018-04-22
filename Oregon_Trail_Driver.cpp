@@ -9,7 +9,7 @@ Cloun9 Workspace Editor Link: https://ide.c9.io/line4246/csci1300_amish
 #include <iostream>
 #include <string> 
 #include <fstream>
-#include <vector>
+#include <math.h>
 #include "Wagon.h"
 using namespace std;
 
@@ -35,6 +35,32 @@ void saveData(Wagon one)
     }
 
     save.close();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool Puzzle()
+{
+    int tries = 0;  // initilized the amount of tries the user has to win.
+    int target = randomNumbers(1, 10);  //creats a random number between one and ten for the user to guess.
+
+    while (tries < 3)  //loops until all 3 tries are up.
+    {
+        cout << "Guess a number between 1 and 10." << endl;  //asks the user to guess a number
+        int guess = Amount();  //runs the unser input through the amount function to weed out edge cases.
+
+        if (guess == target)  //determines if the user guessed the right value
+        {
+            cout << "You guess the right number! You solved the puzzle!" << endl;  //tells the user they won.
+            return true;  //returns true signifying the puzzle was solved
+        }
+        else
+        {
+            cout << "Not quite. Try again." << endl;  //tells the user they were wrong.
+            tries++;  //adds one to the try counter.
+        }
+    }
+    
+    cout << "Sorry, but you've ran out of tries and failed the puzzle." << endl;  //tells the user they lost.
+    return false;  //returns false signifying the user failed to solve the puzzle.
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon shop(Wagon one, Wagon cart)
@@ -150,8 +176,8 @@ Wagon shop(Wagon one, Wagon cart)
             
             numAmount = Amount();
 
-            if (numAmount * one.getMaterials(1).getCost() < one.getMoney() - bill)
-                cart.setMaterialAmount(numAmount, 1);
+            if (numAmount * one.getMaterials(1).getCost() < one.getMoney() - bill)   //determines of the player has enough to purchase this item
+                cart.setMaterialAmount(numAmount, 1);  //adds the food to the players cart.
             else
             {
                 cout << "Sorry buckaroo, looks like you don't have enough!" << endl;
@@ -171,8 +197,8 @@ Wagon shop(Wagon one, Wagon cart)
             
             numAmount = Amount();
 
-            if (numAmount * one.getMaterials(2).getCost() < one.getMoney() - bill)
-                cart.setMaterialAmount(numAmount, 2);
+            if (numAmount * one.getMaterials(2).getCost() < one.getMoney() - bill)  //determines of the player has enough to purchase this item
+                cart.setMaterialAmount(numAmount * 20, 2);  //adds 20 * however many boxes of bullets to the playes cart
             else
             {
                 cout << "Sorry slugger, looks like you don't have enough!" << endl;
@@ -520,18 +546,208 @@ Wagon Continue(Wagon one, Wagon cart)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Hunt(Wagon one)
 {
-    system("clear");
+    system("clear");  // the terminal is cleared for the next turn/screen
 
-    cout << "Hunt" << endl;
+    int foodGained = 0;
+
+    if (randomNumbers(1, 2) == 1)  //determines if the user will encounter a rabit.
+    {
+        string choice;
+        cout << "You got lucky! your encountered a rabbit! Do you want to hunt it? (y/n)" << endl;  //tells the user they found a rabbit
+        getline(cin, choice);
+
+        if (choice == "y")  //determines if the user chose to hunt the rabit
+        {
+             if (one.getMaterials(2).getAmount() >= 10)  //check to see if the player has enough bullets to hunt.
+             {
+                 if (Puzzle() == true)  //check to see if they passed the puzzle
+                 {
+                    cout << "Success! You have gained 2 lbs. of food!" << endl;  //tells the user they have had a successful hunt
+                    foodGained += 2;  //adds 10 to the players food amount
+                    one.setMaterialAmount(one.getMaterials(2).getAmount() - 10, 2); // removes 10 bullets from the users inventory.
+                 }
+                 else
+                    cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+             }
+             else
+                cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+        }
+    }
+    if(randomNumbers(1, 4) == 1)  //determines if the user encountered a fox
+    {
+        string choice;  //stores the users choice.
+        cout << "You got lucky! your encountered a fox! Do you want to hunt it? (y/n)" << endl;  //tells the user they found a rabbit
+        getline(cin, choice);  //takes in the users choice from the command line.
+
+        if (choice == "y")  //determines if the user chose to hunt the rabit
+        {
+             if (one.getMaterials(2).getAmount() >= 10)  //check to see if the player has enough bullets to hunt.
+             {
+                 if (Puzzle() == true)  //check to see if they passed the puzzle
+                 {
+                    cout << "Success! You have gained 5 lbs. of food!" << endl;  //tells the user they have had a successful hunt
+                    foodGained += 8;  //adds 8 to the players food amount
+                    one.setMaterialAmount(one.getMaterials(2).getAmount() - 8, 2); // removes 8 bullets from the users inventory.
+                 }
+                 else
+                    cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+             }
+             else
+                cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+        }
+    }
+    int deerChance = randomNumbers(1, 100);  //created a variable which takes a random number from 1 tp 100
+    if(deerChance >= 1 && deerChance <= 15)  //determines if the random number fell between 1 and 15 creating a 15% chance or occurance
+    {
+        string choice;  //stores the users choice.
+        cout << "You got lucky! your encountered a deer! Do you want to hunt it? (y/n)" << endl;  //tells the user they found a rabbit
+        getline(cin, choice);  //takes in the users choice from the command line.
+
+        if (choice == "y")  //determines if the user chose to hunt the rabit
+        {
+             if (one.getMaterials(2).getAmount() >= 10)  //check to see if the player has enough bullets to hunt.
+             {
+                 if (Puzzle() == true)  //check to see if they passed the puzzle
+                 {
+                    int deerFood = randomNumbers(30, 55);  //finds a random number between 30 and 55
+                    cout << "Success! You have gained " << deerFood << " lbs. of food!" << endl;  //tells the user they have had a successful hunt
+                    foodGained += deerFood;  //adds 30-55 lbs. to the players food amount
+                    one.setMaterialAmount(one.getMaterials(2).getAmount() - 5, 2); // removes 5 bullets from the users inventory.
+                 }
+                 else
+                    cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+             }
+             else
+                cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+        }
+    }
+    int bearChance = randomNumbers(1, 100);  ////created a variable which takes a random number from 1 tp 100
+    if(bearChance >= 1 && bearChance <= 7)  //determines if the user encounters a bear
+    {
+        string choice;  //stores the users choice.
+        cout << "You got lucky! your encountered a bear! Do you want to hunt it? (y/n)" << endl;  //tells the user they found a rabbit
+        getline(cin, choice);  //takes in the users choice from the command line.
+
+        if (choice == "y")  //determines if the user chose to hunt the rabit
+        {
+             if (one.getMaterials(2).getAmount() >= 10)  //check to see if the player has enough bullets to hunt.
+             {
+                 if (Puzzle() == true)  //check to see if they passed the puzzle
+                 {
+                    int bearFood = randomNumbers(100, 250);  //finds a random number between 100 and 250
+                    cout << "Success! You have gained " << bearFood << " lbs. of food!" << endl;  //tells the user they have had a successful hunt
+                    foodGained += bearFood;  //adds 100-250 lbs. to the players food amount
+                    one.setMaterialAmount(one.getMaterials(2).getAmount() - 10, 2); // removes 10 bullets from the users inventory.
+                 }
+                 else
+                    cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+             }
+             else
+                cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+        }
+    }
+    if(randomNumbers(1, 20) == 1)  //determines if the user encounters a moose (5% chance).
+    {
+        string choice;  //stores the users choice.
+        cout << "You got lucky! your encountered a moose! Do you want to hunt it? (y/n)" << endl;  //tells the user they found a rabbit
+        getline(cin, choice);  //takes in the users choice from the command line.
+
+        if (choice == "y")  //determines if the user chose to hunt the rabit
+        {
+             if (one.getMaterials(2).getAmount() >= 10)  //check to see if the player has enough bullets to hunt.
+             {
+                 if (Puzzle() == true)  //check to see if they passed the puzzle
+                 {
+                    int mooseFood = randomNumbers(300, 600);  //finds a random number between 300 and 600
+                    cout << "Success! You have gained " << mooseFood << " lbs. of food!" << endl;  //tells the user they have had a successful hunt
+                    foodGained += mooseFood;  //adds 300-600 lbs. to the players food amount
+                    one.setMaterialAmount(one.getMaterials(2).getAmount() - 12, 2); // removes 12 bullets from the users inventory.
+                 }
+                 else
+                    cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+             }
+             else
+                cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+        }
+    }
+    if (foodGained != 0)  //determines if the user gained any food.
+    {
+        string choice = "";
+
+        //asks the user how well they want to eat.
+        cout << "How well would you like to eat?" << endl;
+        cout << "   (p)oorly: 2 lbs. of food per person" << endl;
+        cout << "   (m)oderately: 3 lbs. of food per person" << endl;
+        cout << "   (w)ell: 5 lbs. of food per person" << endl;
+        getline(cin, choice);
+
+        while(true)  //runs untill the user picks a valid choice
+        {
+            if(choice == "p")  //determines if the user chose p for poor
+            {
+                foodGained -= 2;  //takes 2 away from the food gained. since 3 was already eaten today, 1 is added to compensate
+                break;  //the while loop is exited
+            }
+            else if(choice == "m")  //determines if the user chose m for moderate
+            {
+                foodGained -= 3;
+                break;  //takes 3 away from the food gained. 
+            }
+            else if(choice == "w")  //determines if the user chose w for well
+            {
+                foodGained -= 5;  //takes 5 away from the food gained. since 3 was already eated, only 2 is taken away.
+                for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+                {
+                    if (one.getPersons(i).getSickDays() > 0)  //check to see if anyone is sick
+                    {
+                        one.getPersons(i).setSickDays(0);  //takes one day off the sick person
+                        cout << one.getPersons(i).getName() << " is all healthy!" << endl;  //tells the user sick people are feeling better.
+                    }
+                }
+                break;  //the while loop is exited
+            }
+            else 
+            {
+                cout << "Invalid choice. Please try again." << endl;  //tells the user their choice is invalid
+                getline(cin, choice);  //retakes in the users choice.
+            }
+        }
+    }
+    else
+    {
+        cout << "Hunt was unsuccessful." << endl;  //informs the user their hunt was unsuccessful.
+        foodGained -= 3;  //removes 3 from the users food for a wasted day.
+    }
+
+    if(one.getMaterials(1).getAmount() + foodGained <= 1000)  //determines if the food gained is greater than 1000
+        one.setMaterialAmount(one.getMaterials(1).getAmount() + foodGained, 1);  //adds the food gained to the wagon
+    else
+    {
+        cout << "The wagon can only hold 1000 lbs. of food. Some had to be left behind." << endl;  //tells the user there was too much food
+        one.setMaterialAmount(1000, 1);  //the wagon food amount is set to 1000
+        clear();
+    }
+    one.setTimeDay(1);  //the day is set to increase by one for the hunt.
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Wagon Quit(Wagon one)
+void Quit(Wagon one)
 {
     system("clear");
 
-    cout << "quit" << endl;
-    return one;
+    cout << "You were unable to make it to Oregon!" << endl;
+    cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
+    cout << "Leaders name: " << one.getPersons(0).getName() << endl;
+    cout << "Miles Travelled: " << one.getMiles() << endl;
+
+    if (one.getMaterials(1).getAmount() < 0)  //check to see if the food remaining is less than 0
+        cout << "Food Remaining: 0" << endl;  //print out 0 for food remaining
+    else 
+        cout << "Food Remaining: " << one.getMaterials(1).getAmount() << endl;  //prints out the food remaining.
+
+    cout << "Cash Remaining: $" << one.getMoney() << endl;
+    saveData(one);
+    exit(0);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Display(Wagon one, Wagon cart)
@@ -569,13 +785,15 @@ Wagon Display(Wagon one, Wagon cart)
     }
     else if(choice == "4")  //determines if the user will want to Quit
     {
-        one = Quit(one);  //takes the user to the quit function
+        Quit(one);  //takes the user to the quit function
     }
     return one;  //all data changed in the one class is returned to the main function
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Wagon Misfortune(Wagon one)
 { 
+    system("clear");  //clears the terminal
+
     int event = randomNumbers(1, 5);  //this will randomly choose a misfortune to occure.
 
     //------------------------------------------------------------------//
@@ -662,11 +880,12 @@ Wagon Misfortune(Wagon one)
     else if (event == 5)  //determines if the player will experience bad weather.
     {
         int weather = randomNumbers(1, 5);
+        cout << weather << endl;
         string weatherType[5] = {"Hail!", "Heavy rain!", "Storm!", "Blizzard!", "Hurricane!"};
 
         if(weather == 1 || weather == 2)  //checks the weather for hail
         {
-            cout << "Oh no! The weather has turned rotten. " << weatherType[weather] << endl;  //tells the user that hail has struck
+            cout << "Oh no! The weather has turned rotten. " << weatherType[weather - 1] << endl;  //tells the user that hail has struck
             one.setTimeDay(1);  //day is set to one
 
             for (int i = 0; i < 5; i++)  //loops through each person on the wagon
@@ -680,7 +899,7 @@ Wagon Misfortune(Wagon one)
         }
         else if(weather == 3 || weather == 4)  //checks the weather for hail
         {
-            cout << "Oh no! The weather has turned rotten. " << weatherType[weather] << endl;  //tells the user that hail has struck
+            cout << "Oh no! The weather has turned rotten. " << weatherType[weather - 1] << endl;  //tells the user that hail has struck
             one.setTimeDay(3);  //day is set to one
 
             for (int i = 0; i < 5; i++)  //loops through each person on the wagon
@@ -694,7 +913,7 @@ Wagon Misfortune(Wagon one)
         }
         else if(weather == 5)  //checks the weather for hail
         {
-            cout << "Oh no! The weather has turned rotten. " << weatherType[weather] << endl;  //tells the user that hail has struck
+            cout << "Oh no! The weather has turned rotten. " << weatherType[weather - 1] << endl;  //tells the user that hail has struck
             one.setTimeDay(7);  //day is set to one
 
             for (int i = 0; i < 5; i++)  //loops through each person on the wagon
@@ -711,13 +930,58 @@ Wagon Misfortune(Wagon one)
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void raiders()
+Wagon raiders(Wagon one)
 {
-    //function that will similate a raider attack and the options the user can do,
+    int choice;  //creates a varialbe for the user choice to be held
 
-    //raiders eill be given a specifioc chance to invade.
+    cout << "Riders ahead! They look hostile" << endl;  //tells the user raiders are ahead.
+    cout << "How do you wish to proceed" << endl;  //askes the user how to with to proceed
+    cout << "   1. Run (will loose 1 ox, 10 lbs. or food, and 1 wagon part)" << endl;  //tells the use what they will loose if they run 
+    cout << "   2. Attack (Can with win 50 lbs. of food and bullets or loose 50 lbs. of good and .25 of cash)" << endl; //tells the user what happens if they atteck.
+    cout << "   3. Surrender (will loose a quarter of cash reserves)" << endl; // tells the user what they will loose if they surrender.
 
-    //if an invasion occurs, the user will be given options on how to proceed.
+    choice = Amount();
+
+    if (choice == 1)  //determines if the player will run
+    {
+        system("clear");  //clears the terminal
+
+        int randomPart = randomNumbers(3, 5);  //randomly choses a wagon part to leave behind.
+
+        cout << "Your party escapes the raider, but at what cost?" << endl; //tells the user they got away
+        one.setMaterialAmount(one.getMaterials(0).getAmount() - 1, 0); //decreases the oxen amount by 1 from players inventory
+        one.setMaterialAmount(one.getMaterials(1).getAmount() - 10, 1); //decreases the food amount by 10 from players inventory
+        one.setMaterialAmount(one.getMaterials(randomPart).getAmount() - 1, randomPart); //decreases the wagon parts amount by 1 from players inventory
+        clear(); //clears the terminal
+    }
+    else if (choice == 2)  //determines if the user will attack
+    {
+        system("clear");  //clears the terminal
+
+        bool maybe = Puzzle();  //runs the player through the puzzle function
+
+        if (maybe == true)  //determines of the play won the puzzle and therefore the attack
+        {
+            cout << "Congradulations! You defeat the raiders!" << endl;
+            one.setMaterialAmount(one.getMaterials(1).getAmount() + 50, 1);  //they player gets 50 pounds of food added to their wagon
+            one.setMaterialAmount(one.getMaterials(2).getAmount() + 50, 2);  //they player gets 50 bullets added to their wagon
+            clear();   //clears the terminal
+        }
+        else
+        {
+            cout << "After fighting with the raiders, you and your wagon suffers losses" << endl;  //tells the user they lost
+            one.setMaterialAmount(one.getMaterials(2).getAmount() - 50, 2);  //they player looses 50 bullets from their wagon
+            one.setMoney(one.getMoney() - (one.getMoney() / 4));  //the player looses 1/4 of their cash reserves.
+            clear();   //clears the terminal
+        }
+    }
+    else if (choice == 3)  //determines if the user surrenders
+    {
+        cout << "Your party surrenders. For this, the raiders are merciful. Only cash is taken" << endl; //the user is told that only cash is taken.
+        one.setMoney(one.getMoney() - (one.getMoney() / 4));  //the player looses 1/4 of their cash reserves.
+        clear();   //clears the terminal
+    }
+    return one;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -746,20 +1010,21 @@ int main()
     clear();  //clears the screen untill the user presses enter.
 
     one = shop(one, cart);  //the function takes the play into the shop function and then overloads the wagon object so data is saved
-
-    for (int i = 0; i < 7; i++)
-    {
-        cout << one.getMaterials(i).getAmount() << endl;
-    }
 //*********************************************************************************************************//
 
     while (one.getMiles() < 2048)  //this checks after each turn the amount of miles travled to determine if the player has made it to the end
     {
         one = Display(one, cart);  //after each turn the date is passed back into the one object.
                              // the new data is then passed right back into the display function for the next turn.
-        int random = randomNumbers (1, 10);
-        if (random <= 4 && random >= 1)
+        int random = randomNumbers (1, 10);  //randomly pick a number between one and 10 for the is misfortune
+        if (random <= 4 && random >= 1)  //created a 40 percent chance for misfortune to happen.
             one = Misfortune(one);
+
+        int raidersProbability = (((pow((one.getMiles()/100) - 4, 2) + 72)/(pow((one.getMiles()/100) - 4, 2) + 12)) - 1) * 10;  //determines odds of meeting raiders.
+        int odds = randomNumbers(1, 100);  //creates a randomNumber generator from 1 to 100
+        if (odds >= 1 && odds <= raidersProbability)  //determines if raiders will occure
+            one = raiders(one);
+
         //this if statement checks after each turn whether or not they play meets any of the conditions which ends the game
         if(one.getMaterials(1).getAmount() <= 0  || 
            one.getPersons(0).getAlive() == false ||
@@ -784,7 +1049,7 @@ int main()
         }
         clear();  //after each turn, the screen is cleared.
     }
-    cout << "Congradulations! You have made it to Oregon!" << endl;
-    saveData(one);
+    cout << "Congradulations! You have made it to Oregon!" << endl;  //the player wins and the game is over
+    saveData(one);  //all data is saved and printed to a seperate file.
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
