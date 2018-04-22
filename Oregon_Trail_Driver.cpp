@@ -37,7 +37,7 @@ void saveData(Wagon one)
     save.close();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Wagon shop(Wagon one)
+Wagon shop(Wagon one, Wagon cart)
 {
     //*********************************************************************************************************//
     /** 
@@ -65,33 +65,41 @@ Wagon shop(Wagon one)
     float numAmount;  //casted form of the amoun variable
     float bill = 0.0;  //sets the intial bill to $0.
 
-    Supplies storeTemp();
-
     while (true)  //runs indefinatly or until q is chosen (contains a break command)
     {
         system("clear");
 
+        //prints out what the player current has on hand
         cout << "\nCurrent Items:\n" << endl;
+        cout << "Oxen:    " << one.getMaterials(0).getAmount() << endl;
+        cout << "Food:    " << one.getMaterials(1).getAmount() << endl;
+        cout << "Bullets: " << one.getMaterials(2).getAmount() << endl;
+        cout << "Wheels:  " << one.getMaterials(3).getAmount() << endl;
+        cout << "Axles:   " << one.getMaterials(4).getAmount() << endl;
+        cout << "Tongues: " << one.getMaterials(5).getAmount() << endl;
+        cout << "MedKits: " << one.getMaterials(6).getAmount() << endl;
 
-        cout << "1. Oxen           " << "$" << one.getMaterials(0).getCost() * one.getMaterials(0).getAmount() << endl;
-        cout << "2. Food           " << "$" << one.getMaterials(1).getCost() * one.getMaterials(1).getAmount() << endl;
-        cout << "3. Bullets        " << "$" << one.getMaterials(2).getCost() * one.getMaterials(2).getAmount() << endl;
-        cout << "4. Spare Parts    " << "$" << (one.getMaterials(3).getCost() * one.getMaterials(3).getAmount())
-                                      + (one.getMaterials(4).getCost() * one.getMaterials(4).getAmount())
-                                      + (one.getMaterials(5).getCost() * one.getMaterials(5).getAmount())
-                                      + (one.getMaterials(6).getCost() * one.getMaterials(6).getAmount()) << endl;
+        cout << "\n------------------------\n" << endl;
+
+        cout << "1. Oxen           " << "$" << one.getMaterials(0).getCost() * cart.getMaterials(0).getAmount() << endl;
+        cout << "2. Food           " << "$" << one.getMaterials(1).getCost() * cart.getMaterials(1).getAmount() << endl;
+        cout << "3. Bullets        " << "$" << one.getMaterials(2).getCost() * cart.getMaterials(2).getAmount() << endl;
+        cout << "4. Spare Parts    " << "$" << (one.getMaterials(3).getCost() * cart.getMaterials(3).getAmount())
+                                             + (one.getMaterials(4).getCost() * cart.getMaterials(4).getAmount())
+                                             + (one.getMaterials(5).getCost() * cart.getMaterials(5).getAmount())
+                                             + (one.getMaterials(6).getCost() * cart.getMaterials(6).getAmount()) << endl;
 
     //*********************************************************************************************************//
     /**
      * This block is used to calculate the total bill after each puchase
      */
-        bill = ((one.getMaterials(0).getAmount() * one.getMaterials(0).getCost()) 
-               +(one.getMaterials(1).getAmount() * one.getMaterials(1).getCost())
-               +(one.getMaterials(2).getAmount() * one.getMaterials(2).getCost())
-               +(one.getMaterials(3).getAmount() * one.getMaterials(3).getCost())
-               +(one.getMaterials(4).getAmount() * one.getMaterials(4).getCost())
-               +(one.getMaterials(5).getAmount() * one.getMaterials(5).getCost())
-               +(one.getMaterials(6).getAmount() * one.getMaterials(6).getCost()));
+        bill = ((cart.getMaterials(0).getAmount() * one.getMaterials(0).getCost()) 
+               +(cart.getMaterials(1).getAmount() * one.getMaterials(1).getCost())
+               +(cart.getMaterials(2).getAmount() * one.getMaterials(2).getCost())
+               +(cart.getMaterials(3).getAmount() * one.getMaterials(3).getCost())
+               +(cart.getMaterials(4).getAmount() * one.getMaterials(4).getCost())
+               +(cart.getMaterials(5).getAmount() * one.getMaterials(5).getCost())
+               +(cart.getMaterials(6).getAmount() * one.getMaterials(6).getCost()));
         cout << "\nYour bill is: $" << bill << endl; 
         cout << "After payment, you will have $" << one.getMoney() - bill << endl;
 
@@ -113,12 +121,15 @@ Wagon shop(Wagon one)
             //Takes the amount the user wants and adds it the amount data member in the specified supply object
             //if there is enough money and the amount spent on oxen is between 100 and 200.                 
             
-            numAmount = Amount();
+            numAmount = Amount() + one.getMaterials(0).getAmount();
 
             if (numAmount * one.getMaterials(0).getCost() < one.getMoney() - bill && numAmount * one.getMaterials(0).getCost() >= 100 && numAmount * one.getMaterials(0).getCost() <= 200)
-                one.setMaterialAmount(numAmount, 0);
+                cart.setMaterialAmount(numAmount, 0);
             else if (numAmount * 40 > one.getMoney())
+            {
                 cout << "Sorry sport, looks like you don't have enough!" << endl;
+                clear();
+            }
             else
             {
                 cout << "Sorry champ, you must speen between $100 and $200 on oxen" << endl;
@@ -140,9 +151,12 @@ Wagon shop(Wagon one)
             numAmount = Amount();
 
             if (numAmount * one.getMaterials(1).getCost() < one.getMoney() - bill)
-                one.setMaterialAmount(numAmount, 1);
+                cart.setMaterialAmount(numAmount, 1);
             else
+            {
                 cout << "Sorry buckaroo, looks like you don't have enough!" << endl;
+                clear();
+            }
         }
         //*********************************************************************************************************//  
         /**
@@ -158,9 +172,12 @@ Wagon shop(Wagon one)
             numAmount = Amount();
 
             if (numAmount * one.getMaterials(2).getCost() < one.getMoney() - bill)
-                one.setMaterialAmount(numAmount, 2);
+                cart.setMaterialAmount(numAmount, 2);
             else
+            {
                 cout << "Sorry slugger, looks like you don't have enough!" << endl;
+                clear();
+            }
         }
         //*********************************************************************************************************// 
         /**
@@ -174,10 +191,10 @@ Wagon shop(Wagon one)
                 system("clear");
 
                 cout << "It's a food idea to have a few spare parts for your wagon. Here are the prices: " << endl;
-                cout << "1. Wheels     " << "$" << one.getMaterials(3).getAmount() * one.getMaterials(3).getCost() << endl;
-                cout << "2. Axles      " << "$" << one.getMaterials(4).getAmount() * one.getMaterials(4).getCost() << endl;
-                cout << "3. Tongues    " << "$" << one.getMaterials(5).getAmount() * one.getMaterials(5).getCost() << endl;
-                cout << "4. MedKits    " << "$" << one.getMaterials(6).getAmount() * one.getMaterials(6).getCost() << endl;
+                cout << "1. Wheels     " << "$" << cart.getMaterials(3).getAmount() * one.getMaterials(3).getCost() << endl;
+                cout << "2. Axles      " << "$" << cart.getMaterials(4).getAmount() * one.getMaterials(4).getCost() << endl;
+                cout << "3. Tongues    " << "$" << cart.getMaterials(5).getAmount() * one.getMaterials(5).getCost() << endl;
+                cout << "4. MedKits    " << "$" << cart.getMaterials(6).getAmount() * one.getMaterials(6).getCost() << endl;
 
                 cout << "\nWhich item would you like to purchase?" << endl;
                 cout << "press 'q' to return to the store" << endl;
@@ -187,39 +204,45 @@ Wagon shop(Wagon one)
                 {
                     cout << "How many wheels do you want?" << endl;
                     
-                    
                     numAmount = Amount();
 
                     if (numAmount * one.getMaterials(3).getCost() < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, 3);
+                        cart.setMaterialAmount(numAmount, 3);
                     else
+                    {
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
+                        clear();
+                    }
                 }
             //---------------------------------------------------------------------------//
                 else if (choice == "2")
                 {
                     cout << "How many axles would you like?" << endl;
                     
-                    
                     numAmount = Amount();
 
                     if (numAmount * one.getMaterials(4).getCost() < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, 4);
+                        cart.setMaterialAmount(numAmount, 4);
                     else
+                    {
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
+                        clear();
+                    }
                 }
             //---------------------------------------------------------------------------//
                 else if (choice == "3")
                 {
                     cout << "How many tongues do you want?" << endl;
                                 
-                                
-                                numAmount = Amount();
+                    numAmount = Amount();
 
                     if (numAmount * one.getMaterials(5).getCost() < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, 5);
+                        cart.setMaterialAmount(numAmount, 5);
                     else
+                    {
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
+                        clear();
+                    }
                 }
             //---------------------------------------------------------------------------//
                 else if (choice == "4")
@@ -230,9 +253,12 @@ Wagon shop(Wagon one)
                     numAmount = Amount();
 
                     if (numAmount * one.getMaterials(6).getCost() < one.getMoney() - bill)
-                        one.setMaterialAmount(numAmount, 6);
+                        cart.setMaterialAmount(numAmount, 6);
                     else
+                    {
                         cout << "Sorry chief, looks like you don't have enough!" << endl;
+                        clear();
+                    }
                 }
                 else
                     break;
@@ -244,12 +270,18 @@ Wagon shop(Wagon one)
          */
         else if (choice == "q")
         {
-            one.setMoney(1000.0 - bill);  //1000 because 200 was spent on the wagon itself.
+            
+            for(int i = 0; i < 7; i++)
+            {
+                one.setMaterialAmount(cart.getMaterials(i).getAmount() + one.getMaterials(i).getAmount(), i);  //adds new items to players inventory.
+            }
+
+            one.setMoney(one.getMoney() - bill);  //1000 because 200 was spent on the wagon itself.
             break;
         }
     }
     system("clear");
-    saveData(one);
+    //saveData(one);
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,6 +314,24 @@ Wagon Stop(Wagon one)
     cout << "How many days would you like to rest?" << endl;  //asks the user how long to wait.
     waitTime = Amount();  //has the user input an amount using the Amount function.
 
+    for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+    {
+        if (one.getPersons(i).getSickDays() > 0 && one.getPersons(i).getSickDays() >= waitTime)  //check to see if anyone is sick
+        {
+            one.getPersons(i).setSickDays(one.getPersons(i).getSickDays() - waitTime);  //takes one day off the sick person
+            cout << one.getPersons(i).getName() << " is starting to feel better." << endl;  //tells the user sick people are feeling better.
+        }
+        else if (one.getPersons(i).getSickDays() > 0)
+        {
+            one.getPersons(i).setSickDays(0);  //takes one day off the sick person
+            cout << one.getPersons(i).getName() << " is all healthy!" << endl;  //tells the user sick people are feeling better.
+        }
+        else
+        {
+            ;
+        }
+    }
+
     one.setTimeDay(waitTime);  //sets the date to however many days the player chose to wait
     one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * waitTime), 1);  //Removes 3 lbs. of food per day
     
@@ -297,9 +347,18 @@ Wagon Stop(Wagon one)
     return one;  //returns the changes to the object
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Wagon Continue(Wagon one)
+Wagon Continue(Wagon one, Wagon cart)
 {
     system("clear");  // the terminal is cleared for the next turn/screen
+
+    for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+    {
+        if (one.getPersons(i).getSickDays() > 0)  //check to see if anyone is sick
+        {
+            one.getPersons(i).setSickDays(0);  //takes one day off the sick person
+            cout << one.getPersons(i).getName() << " is all healthy now." << endl;  //tells the user sick people are feeling better.
+        }
+    }
 
     one.setTimeDay(14);  //sets the date to 2 weeks in the futur
     one.setMaterialAmount(one.getMaterials(1).getAmount() - (3 * 14), 1);  //Removes 3 lbs. of food per day
@@ -360,40 +419,40 @@ Wagon Continue(Wagon one)
                     if (one.getMiles() >= 304 && one.getMiles() < 640)
                     {
                         for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
-                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 1.25);  //sets the materials cost to a higher value depended on where in the trail the user is
-                        shop(one);  //user is taken to the shop
+                            one.setMaterialCost(one.getMaterials(i).getCost() * 1.25, i);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        one = shop(one, cart);  //user is taken to the shop
                         one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
                         break; //the loop breaks
                     }
                     else if (one.getMiles() >= 640 && one.getMiles() < 989)  //determines where the user is on the trail.                   
                     {
                         for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
-                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 1.50);  //sets the materials cost to a higher value depended on where in the trail the user is
-                        shop(one);  //user is taken to the shop
+                            one.setMaterialCost(one.getMaterials(i).getCost() * 1.50, i);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        one = shop(one, cart);  //user is taken to the shop
                         one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
                         break; //the loop breaks
                     }
                     else if (one.getMiles() >= 989 && one.getMiles() < 1395)  //determines where the user is on the trail.                    
                     {
                         for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
-                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 1.75);  //sets the materials cost to a higher value depended on where in the trail the user is
-                        shop(one);  //user is taken to the shop
+                            one.setMaterialCost(one.getMaterials(i).getCost() * 1.75, i);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        one = shop(one, cart);  //user is taken to the shop
                         one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
                         break; //the loop breaks
                     }
                     else if (one.getMiles() >= 1395 && one.getMiles() < 1648)  //determines where the user is on the trail.
                     {
                         for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
-                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 2);  //sets the materials cost to a higher value depended on where in the trail the user is                      
-                        shop(one);  //user is taken to the shop
+                            one.setMaterialCost(one.getMaterials(i).getCost() * 2, i); //sets the materials cost to a higher value depended on where in the trail the user is                      
+                        one = shop(one, cart);  //user is taken to the shop
                         one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
                         break; //the loop breaks
                     }
                     else if (one.getMiles() >= 1648 && one.getMiles() < 1863)  //determines where the user is on the trail.
                     {
                         for (int i = 0; i < 7; i++)  //loops through every supply in the wagon class
-                            one.getMaterials(i).setCost(one.getMaterials(i).getCost() * 2.25);  //sets the materials cost to a higher value depended on where in the trail the user is
-                        shop(one);  //user is taken to the shop
+                            one.setMaterialCost(one.getMaterials(i).getCost() * 2.25, i);  //sets the materials cost to a higher value depended on where in the trail the user is
+                        one = shop(one, cart);  //user is taken to the shop
                         one.setMiles(one.getMiles() + 1);  //sets the mile counter to +1 so that the user wont get stuck at a milestone
                         break; //the loop breaks
                     }
@@ -475,14 +534,14 @@ Wagon Quit(Wagon one)
     return one;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Wagon Display(Wagon one)
+Wagon Display(Wagon one, Wagon cart)
 {
     string choice = "";  //initilizes a variable for the user to enter a choice 
 
     //the following 6 lines prints out the date, the miles travelled, the distance till the next landmark, and the food, bullets, and money remaining
     cout << "Today is " << one.getTime().getMonth() << ' ' << one.getTime().getDay() << ", " << one.getTime().getYear() << endl;
     cout << "\n   Miles traveled: " << one.getMiles() << " miles" << endl;
-    cout <<   "   Next landmark:  0" << " miles" << endl;
+    cout <<   "   Next landmark:  " << one.getCheckPoint().getMiles() << " miles" << endl;
     cout <<   "   Food:           " << one.getMaterials(1).getAmount() << " lbs." << endl;
     cout <<   "   Bullets left:   " << one.getMaterials(2).getAmount() << endl;
     cout <<   "   Money left:     $" << one.getMoney() << endl;
@@ -502,7 +561,7 @@ Wagon Display(Wagon one)
     }
     else if (choice == "2")  //determines if the user will want to continue
     {
-        one = Continue(one);  //takes the user to the continue function
+        one = Continue(one, cart);  //takes the user to the continue function
     }
     else if(choice == "3")  //determines if the user will want to Hunt
     {
@@ -515,15 +574,141 @@ Wagon Display(Wagon one)
     return one;  //all data changed in the one class is returned to the main function
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Misfortune()
+Wagon Misfortune(Wagon one)
 { 
-    //this function will simulate the misfortune chance and the puzzles.
-    //a 40 percent change for a missfortune will occure every round
-    //one miss fortune will be chosen at randome the player.
+    int event = randomNumbers(1, 5);  //this will randomly choose a misfortune to occure.
 
-    //depending on the mis fortune, a specific consquence will happen.
+    //------------------------------------------------------------------//
+    if (event == 1)  //determines if a person will get sick
+    {
+        int sickBoi = randomNumbers(1, 5);
+        int sickness = randomNumbers(1, 6);
+
+        if (one.getPersons(sickBoi).getSickDays() > 0)  //check to see if the person already had an illness
+        {
+            cout << "Oh no!" << one.getPersons(sickBoi).getName() << " caught and L and died." << endl;  //tells the player
+            one.getPersons(sickBoi).setAlive(false);  //kills of the person.
+        }
+
+        if (sickness == 1) //check to see what illness the person will have
+        {   
+            cout << one.getPersons(sickBoi).getName() << " has falled ill with typhoid!" << endl;  //tells the player
+            one.getPersons(sickBoi).setSickDays(5);  //sets the persons sick days to 1
+        }
+        else if (sickness == 2) //check to see what illness the person will have
+        {   
+            cout << one.getPersons(sickBoi).getName() << " has falled ill with cholera!" << endl;  //tells the player
+            one.getPersons(sickBoi).setSickDays(5);  //sets the persons sick days to 1
+        }
+        else if (sickness == 3) //check to see what illness the person will have
+        {   
+            cout << one.getPersons(sickBoi).getName() << " has falled ill with diarrhea!" << endl;  //tells the player
+            one.getPersons(sickBoi).setSickDays(5);  //sets the persons sick days to 1
+        }
+        else if (sickness == 4) //check to see what illness the person will have
+        {   
+            cout << one.getPersons(sickBoi).getName() << " has falled ill with measles!" << endl;  //tells the player
+            one.getPersons(sickBoi).setSickDays(5);  //sets the persons sick days to 1
+        }
+        else if (sickness == 5) //check to see what illness the person will have
+        {   
+            cout << one.getPersons(sickBoi).getName() << " has falled ill with dysentery!" << endl;  //tells the player
+            one.getPersons(sickBoi).setSickDays(5);  //sets the persons sick days to 1
+        }
+        else if (sickness == 6) //check to see what illness the person will have
+        {   
+            cout << one.getPersons(sickBoi).getName() << "has falled ill with fever!" << endl;  //tells the player
+            one.getPersons(sickBoi).setSickDays(5);  //sets the persons sick days to 1
+        }
+    }
+    else if (event == 2)  //determines if the player will loose an ox
+    {
+        cout << "Oh no! One of your oxen has gone to a farm up state and died." << endl;  //tells the play an ox died
+        one.setMaterialAmount(one.getMaterials(0).getAmount() - 1, 0);  //and ox is removed from the players wagon
+        cout << "You have " << one.getMaterials(0).getAmount() << " oxen left." << endl;  //tell the user how much is left
+    }
+    else if (event == 3)  //determines of the player will be robbed by thieves.
+    {
+        int foodGone = randomNumbers(10, 25);  //generate a randome amount of food to be stolen
+        cout << "Oh no! Last night you got attacked by a thief!"  << endl;  //tells the play they were robbed
+        one.setMaterialAmount(one.getMaterials(1).getAmount() - foodGone, 1);  //sets the food the the amount stolen
+        cout << "You lost " << foodGone << " lbs. of food" << endl;  //tells the user how much good they have
+    }
+    else if (event == 4)  //determines if the players wagon will break
+    {
+        int brokenPart = randomNumbers(3, 5);
+        cout << "Oh no! A(n) " << one.getMaterials(brokenPart).getName() << " has broken." << endl;  //tells the user what broke
+        one.setMaterialAmount(one.getMaterials(brokenPart).getAmount() - 1, brokenPart);  //removes one of the spare parts from the players inventory
+        
+        if (one.getMaterials(brokenPart).getAmount() <= 0)  //check too see if they player has anymore parts when the misfourtone hits
+        {
+            cout << "You wagon has broke and you have no spare parts!" << endl;  //tells the user they are no more spare parts
+        }
+        else
+        {
+            cout << "It will take 1 day to fix your wagon." << endl;  //tells the user it will take one day to fix wagon
+            one.setTimeDay(1);  //sets the day to one day in the future
+
+            for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+            {
+                if (one.getPersons(i).getSickDays() > 0)  //check to see if anyone is sick
+                {
+                    one.getPersons(i).setSickDays(one.getPersons(i).getSickDays() - 1);  //takes one day off the sick person
+                    cout << one.getPersons(i).getName() << " is starting to feel better." << endl;  //tells the user sick people are feeling better.
+                }
+            }
+        }
+    }
+    else if (event == 5)  //determines if the player will experience bad weather.
+    {
+        int weather = randomNumbers(1, 5);
+        string weatherType[5] = {"Hail!", "Heavy rain!", "Storm!", "Blizzard!", "Hurricane!"};
+
+        if(weather == 1 || weather == 2)  //checks the weather for hail
+        {
+            cout << "Oh no! The weather has turned rotten. " << weatherType[weather] << endl;  //tells the user that hail has struck
+            one.setTimeDay(1);  //day is set to one
+
+            for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+            {
+                if (one.getPersons(i).getSickDays() > 0)  //check to see if anyone is sick
+                {
+                    one.getPersons(i).setSickDays(one.getPersons(i).getSickDays() - 1);  //takes one day off the sick person
+                    cout << one.getPersons(i).getName() << " is starting to feel better." << endl;  //tells the user sick people are feeling better.
+                }
+            }
+        }
+        else if(weather == 3 || weather == 4)  //checks the weather for hail
+        {
+            cout << "Oh no! The weather has turned rotten. " << weatherType[weather] << endl;  //tells the user that hail has struck
+            one.setTimeDay(3);  //day is set to one
+
+            for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+            {
+                if (one.getPersons(i).getSickDays() > 0)  //check to see if anyone is sick
+                {
+                    one.getPersons(i).setSickDays(0);  //takes one day off the sick person
+                    cout << one.getPersons(i).getName() << " is all healthy!" << endl;  //tells the user sick people are feeling better.
+                }
+            }
+        }
+        else if(weather == 5)  //checks the weather for hail
+        {
+            cout << "Oh no! The weather has turned rotten. " << weatherType[weather] << endl;  //tells the user that hail has struck
+            one.setTimeDay(7);  //day is set to one
+
+            for (int i = 0; i < 5; i++)  //loops through each person on the wagon
+            {
+                if (one.getPersons(i).getSickDays() > 0)  //check to see if anyone is sick
+                {
+                    one.getPersons(i).setSickDays(0);  //takes one day off the sick person
+                    cout << one.getPersons(i).getName() << " is all healthy!" << endl;  //tells the user sick people are feeling better.
+                }
+            }
+        }
+    }
+    return one;
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void raiders()
@@ -545,8 +730,9 @@ int main()
  *  have the user enter all of the information for the wagon constructor
  */
 
-    cout << "Welcome to The Oregon Trail!" << endl;
-    Wagon one = Wagon();
+    cout << "Welcome to The Oregon Trail!" << endl;  //welcomes the user to the game
+    Wagon one = Wagon();  //constructs a wagon
+    Wagon cart = Wagon(1);  //constructs a second wagon for the shop
 //*********************************************************************************************************//
 /**
  * Here the game will tell the user about the shop and initiate the shop simulation function.
@@ -557,31 +743,42 @@ int main()
     cout << "Before leaving Independence, you should consider buying supplies." << endl;
     cout << "After buying your wagon, you have $1000 left to spend in the shop." << endl;
     cout << "All of the neccessary materials can be found there, but you do not need to spend all of your money now." << endl;
-    cout << "\nPress enter to continue" << endl;
+    clear();  //clears the screen untill the user presses enter.
 
-    getline(cin, enter);  //takes in the users enter from the terminal
-    if (enter.length() == 0)  //makes sure the users input was an enter
+    one = shop(one, cart);  //the function takes the play into the shop function and then overloads the wagon object so data is saved
+
+    for (int i = 0; i < 7; i++)
     {
-        one = shop(one);  //the function takes the play into the shop function and then overloads the wagon object so data is saved
+        cout << one.getMaterials(i).getAmount() << endl;
     }
 //*********************************************************************************************************//
 
     while (one.getMiles() < 2048)  //this checks after each turn the amount of miles travled to determine if the player has made it to the end
     {
-        one = Display(one);  //after each turn the date is passed back into the one object.
-                                                // the new data is then passed right back into the display function for the next turn.
-
+        one = Display(one, cart);  //after each turn the date is passed back into the one object.
+                             // the new data is then passed right back into the display function for the next turn.
+        int random = randomNumbers (1, 10);
+        if (random <= 4 && random >= 1)
+            one = Misfortune(one);
         //this if statement checks after each turn whether or not they play meets any of the conditions which ends the game
         if(one.getMaterials(1).getAmount() <= 0  || 
            one.getPersons(0).getAlive() == false ||
-           one.getMaterials(0).getAmount() == 0 )  //needs wagon status!!
+           one.getMaterials(0).getAmount() == 0  ||
+           one.getMaterials(3).getAmount() < 0  ||
+           one.getMaterials(4).getAmount() < 0  ||
+           one.getMaterials(5).getAmount() < 0)  
         {
             // the following lines of code display the users status if they have failed and that they died
             cout << "YOU HAVE DIED OF DYSENTERY!" << endl;
             cout << "Leaders name: " << one.getPersons(0).getName() << endl;
             cout << "Miles Travelled: " << one.getMiles() << endl;
-            cout << "Food Remaining: 0" << endl;
-            cout << "Cash Remaining: " << one.getMoney() << endl;
+
+            if (one.getMaterials(1).getAmount() < 0)  //check to see if the food remaining is less than 0
+                cout << "Food Remaining: 0" << endl;  //print out 0 for food remaining
+            else 
+                cout << "Food Remaining: " << one.getMaterials(1).getAmount() << endl;  //prints out the food remaining.
+
+            cout << "Cash Remaining: $" << one.getMoney() << endl;
             saveData(one);  //the player status is also printed out to a results file
             exit(0);  //the entire program is ended 
         }

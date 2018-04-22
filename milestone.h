@@ -20,6 +20,7 @@ class Milestone
     public:
 
         Milestone();
+        ~Milestone();
         
         string getName();
         int getMiles();
@@ -110,11 +111,14 @@ string Milestone::getType()
     return type[TypePlace];
 }
 
-
-
 void Milestone::setInfo()
 {
     MilePlace += 1;
     NamePlace += 1;
     TypePlace += 1;
+}
+
+Milestone::~Milestone()
+{
+    
 }

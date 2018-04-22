@@ -33,6 +33,7 @@ class Wagon
     public:
 
         Wagon();
+        Wagon(int);  //used for the shop
         ~Wagon();
 
         Date getTime();
@@ -43,7 +44,7 @@ class Wagon
         Milestone getCheckPoint();
 
         void setMaterialAmount(int, int);
-        void setMaterialCost(int, int);
+        void setMaterialCost(float, int);
 
         void setPersonsAlive(bool, int);
         void setPersonsSickDays(int, int);
@@ -130,8 +131,28 @@ Wagon::Wagon()
     }
     //////////////////////////////////////////////////////
     Milestone checkPoint;
-    money = 1200;
+    money = 1000;
     miles = 0;
+}
+
+Wagon::Wagon(int tienda)
+{
+    Supplies oxen("oxen", 40);
+        materials[0] = oxen;
+    Supplies food("food", 0.5);
+        materials[1] = food;
+    Supplies bullets("bullets", 2);
+        materials[2] = bullets;
+
+    Supplies wheels("wheels", 20);
+        materials[3] = wheels;
+    Supplies axles("axles", 20);
+        materials[4] = axles;
+    Supplies tongues("tongues", 20);
+        materials[5] = tongues;
+
+    Supplies medKit("medKit", 25);
+        materials[6] = medKit;
 }
 
 Date Wagon::getTime()
@@ -169,9 +190,9 @@ void Wagon::setMaterialAmount(int newAmount, int index)
     materials[index].setAmount(newAmount);
 }
 
-void Wagon::setMaterialCost(int newAmount, int index)
+void Wagon::setMaterialCost(float newAmount, int index)
 {
-    materials[index].setAmount(newAmount);
+    materials[index].setCost(newAmount);
 }
 
 void Wagon::setPersonsAlive(bool alive, int index)
