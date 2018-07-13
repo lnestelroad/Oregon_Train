@@ -26,35 +26,44 @@ class Date
 { 
     public:
 
-        Date();
-        Date(int, string);
+        Date();  //construsts a defult date
+        Date(int, string);  //constructs a costum date,
+        ~Date(); //deconstructs the date class.
 
-        int getDay();
-        string getMonth();
-        int getYear();
+        int getDay();  //returns the day
+        string getMonth();  //returns the month
+        int getYear();  //returns the year
 
-        void setDay(int);
-        int intMonth(string);
-        void setMonth(int);
-        void setYear(int);
+        void setDay(int);  //sets the day
+        int intMonth(string);  //gets the month as an int
+        void setMonth(int);  //sets the month
+        void setYear(int);  //sets the year
 
     private:
 
-        int day;
-        string month;
-        int year;
+        int day;  //holds the day
+        string month;  //holds the month
+        int year;  //holds the year
 
-        string Months[12];
+        string Months[12];  //holds every month in the yaer
 };
 
 #endif 
 
+/**
+ *Algorithm: constructs the date class
+    1. sets the day to 28, month to march, the yaer to 1846, and the months to there respective slot in the month array
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 Date::Date()
 {
-    day = 28;
-    month = "March";
-    year = 1846;
-
+    day = 28; //sets day to 28
+    month = "March";  //sets month to march
+    year = 1846;  //sets year to 1846
+    
+    //sets the months to their respective month array slots.
     Months[3] = "March";
     Months[4] = "April";
     Months[5] = "May";
@@ -66,26 +75,65 @@ Date::Date()
     Months[11] = "November";
 }
 
+/**
+ *Algorithm: constructs a costum date class
+    1. sets the day to Day, month to Month, the yaer to 1846, and the months to there respective slot in the month array
+ * Input Parameter: A day and a month
+ * Output:none
+ * Return:none
+ */
 Date::Date(int Day, string Month)
 {
-    day = Day;
-    month = Month;
-    year = 1846;
+    day = Day;  //day is set to Day
+    month = Month;  //month is set to Month
+    year = 1846;  //year is set to 1846
+
+    //sets the months to their respective month array slots.
+    Months[3] = "March";
+    Months[4] = "April";
+    Months[5] = "May";
+    Months[6] = "June";
+    Months[7] = "July";
+    Months[8] = "August";
+    Months[9] = "September";
+    Months[10] = "October";
+    Months[11] = "November";
 }
 
+/**
+ *Algorithm: returns the day
+    1. returns the day
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 int Date::getDay()
 {
-    return day;
+    return day;  //returns the day
 }
 
+/**
+ *Algorithm: returns the month
+    1.  returns the month
+ * Input Parameter:
+ * Output:
+ * Return:
+ */
 string Date::getMonth()
 {
-    return month;
+    return month;  //returns the month
 }
 
+/**
+ *Algorithm: returns the year
+    1. returns the year
+ * Input Parameter:
+ * Output:
+ * Return:
+ */
 int Date::getYear()
 {
-    return year;
+    return year;  //returns the year
 }
 
 /**
@@ -141,22 +189,49 @@ void Date::setDay(int newDay)
     }
 }
 
+/**
+ *Algorithm: returns the months as an it in the month array
+    1. runs through every month in the array and compares it to the input parameter until a match is made
+    2. th emonth element is returned.
+ * Input Parameter: a month
+ * Output: none
+ * Return: the month element
+ */
 int Date::intMonth(string Month)
 {
-    for (int i = 0; i < 11; i++)
+    for (int i = 0; i < 11; i++)  //loops throught every month in the month array
     {
-        if (Month == Months[i])
-            return i;
+        if (Month == Months[i])  //determines of the input parameter matchs any of the months
+            return i;  //returns the month element
     }
-    return 0;
+    return 0;  //returns 0
 }
 
+/**
+ *Algorithm: sets the month to the input parameter
+    1. sets the month to the input parameter
+ * Input Parameter: a new month
+ * Output:none
+ * Return:none
+ */
 void Date::setMonth(int newMonth)
 {
-    month = Months[newMonth];
+    month = Months[newMonth];  //sets the month to the input parameter
 }
 
+/**
+ *Algorithm: sets the year to the input parameter
+    1. sets the year to the input parameter
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 void Date::setYear(int newYear)
 {
-    year = newYear;
+    year = newYear;  //sets the year to the input parameter
+}
+
+Date::~Date()
+{
+    
 }

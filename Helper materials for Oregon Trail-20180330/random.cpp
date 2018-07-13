@@ -1,7 +1,9 @@
 #include<iostream>
+#include<cstdlib>
 using namespace std;
 
-int randomNumbers(int min, int max){
+int randomNumbers(int min, int max)
+{
     // rand() % (max-min+1) + min
     return (rand() % (max-min+1)) + min;
 }
@@ -11,7 +13,8 @@ int main(){
     // need to write before calling rand() to seed the random number generator
     srand(time(0));
     
-    for(int i=0;i<10;++i){
+    for(int i=0;i<10;++i)
+    {
         // random numbers between 3 and 10
         num = randomNumbers(3,10);
         cout<<num<<" ";

@@ -14,62 +14,87 @@ using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * This function is used to clear the sceen when ever an option is chosen. This is used to simulate the real game and limit clutter 
- * the terminal.
+ * Algorithm: This function is used to clear the sceen when ever an option is chosen. This is used to simulate the real game and limit clutter 
+              the terminal.
+    1. creates a variable for the user to enter
+    2. takes in the users input
+    3.if that user input is 0, the screen is cleared.
+ * Input Parameter: none
+ * Output: Press enter to coninue
+ * Return: none.
  */
 void clear()
 {
-    string enter = "";
-    cout << "\nPress enter to continue" << endl;
+    string enter = "";  // creats a variable for the user input
+    cout << "\nPress enter to continue" << endl;  //has to user press enter
 
     getline(cin, enter);  //takes in the users enter from the terminal
-    if (enter.length() == 0)  //makes sure the users input was an enter
+    system("clear");  //clears the screen
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ *Algorithm: This function is a helper function ment to convert inputted values and sort out things that cannot be converted.
+            Since this is problem is so common in the store, it was given its own function.
+    1. initilized all the neccessary variables include ones to hold the user input and the casted versions.
+    2. The string is check to determine if anything is in there
+    3. Every element in the string is check for digits
+    4. all digits are converted to floats
+ * Input Parameter: None
+ * OutPut: None
+ * Return: users input as a float.
+ */
+float Amount()
+{
+    string amount = "";  //holds the user input
+    string temp = "~";  //holds the values in the user input
+    float numAmount = 0;  //casted form of the amoun variable
+
+    while(true)  //runs indefinatly or until broken out of
+    {
+        getline(cin, amount);  //takes in the user input
+
+        if (amount.length() == 0)  //determines if there was anything in the user inut
+            cout << "Your choice cannot be blank. Please try again." << endl;  //tells the user their anser cannot be blank
+        else 
+            break;  //breaks when something is entered.
+    }
+
+    for (int i = 0; i < amount.length(); i++)  //iterated through every character in the users string.
+    {
+        if (int(amount[i]) >= 48 && int(amount[i]) <= 57)  //determines if the characters are letters or digits
+            temp[i] = amount[i];  //saves all of the digits to a seperate sting.
+    }
+    
+    if (temp == "~")  //determines of there are digits withn the temp sting
     {
         system("clear");
+
+        cout << "Your choice cannot conatin characters. Please try again." << endl;  //tells the users there inoit cannot contain letters
+        clear();  //clears the screen
+        return 0;  //ends the function
+    }
+    else
+    {
+        numAmount = stof(temp);  //convers all the digits to floats
+        return numAmount;  //the digits are then returned.
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * This function is a helper function ment to convert inputted values and sort out things that cannot be converted.
- * Since this is problem is so common in the store, it was given its own function.
+ *Algorithm: This function will take a string and seperate it based on a special character. each seperated fragment will then be stored in an array.
+    1. The function will first start by initializing all of the variables.
+    2. An if statement will be used so sort out edge cases. Specifically for when nothing is entered in the phrase.
+    3. A loop will the iterate for the length of the phrase so that each element can be analized.
+        A. an if statement will determine if the current element is equivolent to the special dividing character
+            *. When it does, the function will make a substring of the phrase based on the last occurance of the special dividing character and the
+               distance to the current special dividing character.
+            *. The counter variable is the incrimented by 1.
+            *. The current position is then stored as the previous postion for the next iteration.
+    4. The wordCounter is then returned.
+ * Input Parameter: a phrase, a dividing character, an empty array, and an array size.
+ * Output: nothing
+ * Return: work count
  */
-float Amount()
-{
-    string amount = "";
-    string temp = "~";
-    float numAmount = 0;  //casted form of the amoun variable
-
-    while(true)
-    {
-        getline(cin, amount);
-
-        if (amount.length() == 0)
-            cout << "Your choice cannot be blank. Please try again." << endl;
-        else 
-            break;
-    }
-
-    for (int i = 0; i < amount.length(); i++)
-    {
-        if (int(amount[i]) >= 48 && int(amount[i]) <= 57)
-            temp[i] = amount[i];
-    }
-    
-    if (temp == "~")
-    {
-        system("clear");
-
-        cout << "Your choice cannot conatin characters. Please try again." << endl;
-        clear();
-        return 0;
-    }
-    else
-    {
-        numAmount = stof(temp);
-        return numAmount;
-    }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int Split (string phrase, char div, string words[], int size)
 {
 	//words[size];

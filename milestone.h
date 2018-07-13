@@ -15,34 +15,50 @@ using namespace std;
 #ifndef MILESTONE_H
 #define MILESTONE_H
 
+
+/**
+ * Class: this class is used to house the milestone class. here is where all of the mile stones will
+ *        be stored/modified
+ * Member Functions: 1 constructors.
+ *                   3 getters, one for each data member,
+ * Data Members: a name, a mile amount, and a type 
+ */
 class Milestone
 {
     public:
 
-        Milestone();
-        ~Milestone();
+        Milestone();  //constructs a new milestone object
+        ~Milestone();  //deconstructs the object
         
-        string getName();
-        int getMiles();
-        string getType();
+        string getName();  //returns the name of the class
+        int getMiles();  //returns the miles of the milestone
+        string getType();  //returns the type of mile stone
 
-        void setInfo();
+        void setInfo();  //sets all of the miles stone arrays ahead by one
 
     private:
-        string name[15];
-        int miles[15];
-        string type[15];
+        string name[15];  //holds the names of the mile markers
+        int miles[15];  //holds the miles of the mile markers
+        string type[15];  //holds the types of the mile markers
 
-        int NamePlace;
-        int MilePlace;
-        int TypePlace;
+        int NamePlace;  //holds the index of the mile marker name
+        int MilePlace;  //holds the index of the mile marker mile
+        int TypePlace;  //holds the index of the mile marker type
 
 };
 
 #endif
 
+/**
+ *Algorithm: //constructs a new milestone object
+    1. each aspect of the mile marker are hard coded in
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 Milestone::Milestone()
 {
+    //all of the land mark names are set to their respective array slot
     name[0] = "Kansas River Crossing";
     name[1] = "Big Blue River Crossing";
     name[2] = "Fort Kearney";
@@ -59,6 +75,7 @@ Milestone::Milestone()
     name[13] = "Blue Mountains";
     name[14] = "Fort Walla Walla";
 
+    //all of the land mark miles are set to their respective array slot
     miles[0] = 102; 
     miles[1] = 185;
     miles[2] = 304; 
@@ -74,7 +91,8 @@ Milestone::Milestone()
     miles[12] = 1648; 
     miles[13] = 1808;
     miles[14] = 1863;
-
+    
+    //all of the land mark types are set to their respective array slot
     type[0] = "r"; 
     type[1] = "r"; 
     type[2] = "f"; 
@@ -91,33 +109,70 @@ Milestone::Milestone()
     type[13] = "m";
     type[14] = "f";
 
-    NamePlace = 0;
+    //the array indexs are all set to 0
+    NamePlace = 0;  
     MilePlace = 0;
     TypePlace = 0;
 }
 
+/**
+ *Algorithm: //returns the name of the class at a specific index
+    1. //returns the name of the class at a specific index
+ * Input Parameter: none
+ * Output:none
+ * Return:none
+ */
 string Milestone::getName()
 {
-    return name[NamePlace];
+    return name[NamePlace];  //returns the name of the class at a specific index
 }
 
+/**
+ *Algorithm: returns the miles of the class at a specific index
+    1. returns the miles of the class at a specific index
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 int Milestone::getMiles()
 {
-    return miles[MilePlace];
+    return miles[MilePlace];  //returns the miles of the class at a specific index
 }
 
+/**
+ *Algorithm: returns the type of the class at a specific index
+    1. returns the type of the class at a specific index
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 string Milestone::getType()
 {
-    return type[TypePlace];
+    return type[TypePlace];  //returns the type of the class at a specific index
 }
 
+/**
+ *Algorithm: all milestone arrays are set to 1 ahead
+    1. all milestone arrays are set to 1 ahead
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 void Milestone::setInfo()
 {
+    //all milestone arrays are set to 1 ahead
     MilePlace += 1;
     NamePlace += 1;
     TypePlace += 1;
 }
 
+/**
+ *Algorithm: milestone is deconstructed
+    1.
+ * Input Parameter:none
+ * Output:none
+ * Return:none
+ */
 Milestone::~Milestone()
 {
     
